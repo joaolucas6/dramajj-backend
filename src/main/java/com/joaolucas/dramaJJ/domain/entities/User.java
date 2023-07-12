@@ -41,7 +41,7 @@ public class User {
     @Column(name = "birth_date")
     private Date birthDate;
 
-    @ManyToOne
+    @OneToMany
     private List<Review> reviews = new ArrayList<>();
 
     @ManyToMany
