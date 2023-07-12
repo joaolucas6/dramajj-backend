@@ -21,7 +21,7 @@ public class Genre {
 
     @Column(name = "name")
     private String name;
-    
+
     @ManyToMany
     private List<Drama> dramas = new ArrayList<>();
 }
