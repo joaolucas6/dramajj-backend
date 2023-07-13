@@ -36,7 +36,7 @@ public class ActorDTO {
 
         actor.getFollowers().forEach(follower -> followersId.add(follower.getId()));
         actor.getDramas().forEach(drama -> dramasId.add(drama.getId()));
-        
+
     }
 
 }
