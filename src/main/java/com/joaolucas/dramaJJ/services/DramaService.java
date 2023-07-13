@@ -2,6 +2,7 @@ package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
+import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Genre;
@@ -42,7 +43,7 @@ public class DramaService {
 
     public DramaDTO create(DramaDTO dramaDTO){
 
-        Drama drama = DTOMapper.toDrama(dramaDTO, null, List.of(),  List.of());
+        Drama drama = DTOMapper.toDrama(dramaDTO, null, List.of(),  List.of(), List.of());
 
         dramaRepository.save(drama);
 
@@ -110,6 +111,40 @@ public class DramaService {
 
     }
 
+    public List<GenreDTO> addGenre(Long genreId, Long dramaId) throws Exception {
+        Genre genre = genreRepository.findById(genreId).orElseThrow();
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        if(genre.getDramas().contains(drama) || drama.getGenres().contains(genre)) throw new Exception("");
+        genre.getDramas().add(drama);
+        drama.getGenres().add(genre);
 
+        genreRepository.save(genre);
+        dramaRepository.save(drama);
+
+        List<GenreDTO> list = new ArrayList<>();
+
+        drama.getGenres().forEach(listGenre -> list.add(new GenreDTO(listGenre)));
+
+        return list;
+
+    }
+
+    public List<GenreDTO> removeGenre(Long genreId, Long dramaId) throws Exception {
+        Genre genre = genreRepository.findById(genreId).orElseThrow();
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        if(!genre.getDramas().contains(drama) || !drama.getGenres().contains(genre)) throw new Exception("");
+        genre.getDramas().remove(drama);
+        drama.getGenres().remove(genre);
+
+        genreRepository.save(genre);
+        dramaRepository.save(drama);
+
+        List<GenreDTO> list = new ArrayList<>();
+
+        drama.getGenres().forEach(listGenre -> list.add(new GenreDTO(listGenre)));
+
+        return list;
+
+    }
 
 }
