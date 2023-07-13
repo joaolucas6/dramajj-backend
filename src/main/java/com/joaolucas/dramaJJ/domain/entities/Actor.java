@@ -45,8 +45,12 @@ public class Actor {
     private String bio;
 
     @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "actor_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id")
+    )
     private List<User> followers = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "casting")
     private List<Drama> dramas = new ArrayList<>();
 }

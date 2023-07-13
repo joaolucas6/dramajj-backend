@@ -23,5 +23,9 @@ public class Genre {
     private String name;
 
     @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "genre_id"),
+            inverseJoinColumns = @JoinColumn(name = "drama_id")
+    )
     private List<Drama> dramas = new ArrayList<>();
 }

@@ -41,15 +41,19 @@ public class User {
     @Column(name = "birth_date")
     private Date birthDate;
 
-    @OneToMany
+    @OneToMany(mappedBy = "author")
     private List<Review> reviews = new ArrayList<>();
 
     @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "followed_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id")
+    )
     private List<User> followers = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "followers")
     private List<User> following = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "followers")
     private List<Actor> followingActors = new ArrayList<>();
 }

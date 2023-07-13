@@ -22,15 +22,17 @@ public class Review {
     private String title;
 
     @ManyToOne
+    @JoinColumn(name = "author_id")
     private User author;
 
     @ManyToOne
+    @JoinColumn(name = "drama_id")
     private Drama drama;
 
     @Column(name = "rating")
     private Double rating;
 
-    @Column(name = "rating")
+    @Column(name = "instant")
     private Date instant;
 
 

@@ -37,12 +37,17 @@ public class Drama {
     private Integer episodeNumber;
 
     @ManyToOne
+    @JoinColumn(name = "genre_id")
     private Genre genre;
 
     @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "drama_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
     private List<Actor> casting = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "drama")
     private List<Review> reviews = new ArrayList<>();
 
     @ElementCollection
