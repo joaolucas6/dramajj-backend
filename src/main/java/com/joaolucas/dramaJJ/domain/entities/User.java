@@ -29,6 +29,9 @@ public class User {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "profile_pic_img_url")
     private String profilePicImgUrl;
 
