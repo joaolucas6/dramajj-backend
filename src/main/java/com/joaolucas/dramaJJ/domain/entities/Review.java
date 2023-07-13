@@ -21,6 +21,9 @@ public class Review {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "text")
+    private String text;
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;

@@ -37,7 +37,7 @@ public class UserDTO {
         setBio(user.getBio());
         setGender(user.getGender());
         setBirthDate(user.getBirthDate());
-        
+
         user.getReviews().forEach(review -> reviewsId.add(review.getId()));
         user.getFollowers().forEach(follower -> followersId.add(follower.getId()));
         user.getFollowing().forEach(following -> followingId.add(following.getId()));
