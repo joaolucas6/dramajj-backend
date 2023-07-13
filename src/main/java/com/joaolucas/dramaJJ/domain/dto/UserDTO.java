@@ -18,6 +18,8 @@ public class UserDTO {
     private String bio;
     private String gender;
     private Date birthDate;
+    private List<Long> favoriteDramasId = new ArrayList<>();
+    private List<Long> planToWatchId = new ArrayList<>();
     private List<Long> reviewsId = new ArrayList<>();
     private List<Long> followersId = new ArrayList<>();
     private List<Long> followingId = new ArrayList<>();
@@ -38,6 +40,8 @@ public class UserDTO {
         setGender(user.getGender());
         setBirthDate(user.getBirthDate());
 
+        user.getFavoriteDramas().forEach(drama -> favoriteDramasId.add(drama.getId()));
+        user.getPlanToWatch().forEach(drama -> planToWatchId.add(drama.getId()));
         user.getReviews().forEach(review -> reviewsId.add(review.getId()));
         user.getFollowers().forEach(follower -> followersId.add(follower.getId()));
         user.getFollowing().forEach(following -> followingId.add(following.getId()));

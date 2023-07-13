@@ -41,6 +41,12 @@ public class User {
     @Column(name = "birth_date")
     private Date birthDate;
 
+    @ElementCollection
+    private List<Drama> favoriteDramas = new ArrayList<>();
+
+    @ElementCollection
+    private List<Drama> planToWatch = new ArrayList<>();
+
     @OneToMany(mappedBy = "author")
     private List<Review> reviews = new ArrayList<>();
 
