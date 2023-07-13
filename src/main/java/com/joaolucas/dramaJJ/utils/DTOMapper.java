@@ -1,9 +1,6 @@
 package com.joaolucas.dramaJJ.utils;
 
-import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
-import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
-import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
-import com.joaolucas.dramaJJ.domain.dto.UserDTO;
+import com.joaolucas.dramaJJ.domain.dto.*;
 import com.joaolucas.dramaJJ.domain.entities.*;
 
 import java.util.List;
@@ -21,72 +18,84 @@ public class DTOMapper {
             List<User> following,
             List<Actor> followingActor
     ){
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setUsername(userDTO.getUsername());
-        user.setProfilePicImgUrl(userDTO.getProfilePicImgUrl());
-        user.setBio(userDTO.getBio());
-        user.setGender(userDTO.getGender());
-        user.setBirthDate(userDTO.getBirthDate());
-        user.setPassword(password);
-        user.setFavoriteDramas(favoriteDramas);
-        user.setPlanToWatch(planToWatch);
-        user.setReviews(reviews);
-        user.setFollowers(followers);
-        user.setFollowing(following);
-        user.setFollowingActors(followingActor);
 
-        return user;
+        return User
+                .builder()
+                .id(userDTO.getId())
+                .firstName(userDTO.getFirstName())
+                .lastName(userDTO.getLastName())
+                .username(userDTO.getUsername())
+                .profilePicImgUrl(userDTO.getProfilePicImgUrl())
+                .bio(userDTO.getBio())
+                .gender(userDTO.getGender())
+                .birthDate(userDTO.getBirthDate())
+                .password(password)
+                .favoriteDramas(favoriteDramas)
+                .planToWatch(planToWatch)
+                .reviews(reviews)
+                .followers(followers)
+                .following(following)
+                .followingActors(followingActor)
+                .build();
     }
 
     public static Review toReview(ReviewDTO reviewDTO, User author, Drama drama){
-        Review review = new Review();
 
-        review.setId(reviewDTO.getId());
-        review.setTitle(reviewDTO.getTitle());
-        review.setText(reviewDTO.getText());
-        review.setAuthor(author);
-        review.setDrama(drama);
-        review.setRating(reviewDTO.getRating());
-        review.setInstant(reviewDTO.getInstant());
-
-        return review;
+        return Review
+                .builder()
+                .id(reviewDTO.getId())
+                .title(reviewDTO.getTitle())
+                .text(reviewDTO.getText())
+                .author(author)
+                .drama(drama)
+                .rating(reviewDTO.getRating())
+                .instant(reviewDTO.getInstant())
+                .build();
     }
 
 
     public static Drama toDrama(DramaDTO dramaDTO, Genre genre, List<Actor> casting, List<Review> reviews){
-        Drama drama = new Drama();
-        drama.setId(dramaDTO.getId());
-        drama.setName(dramaDTO.getName());
-        drama.setSynopsis(dramaDTO.getSynopsis());
-        drama.setReleaseDate(dramaDTO.getReleaseDate());
-        drama.setPosterImgUrl(dramaDTO.getPosterImgUrl());
-        drama.setEpisodeNumber(dramaDTO.getEpisodeNumber());
-        drama.setGenre(genre);
-        drama.setCasting(casting);
-        drama.setReviews(reviews);
-        drama.setRates(dramaDTO.getRates());
-        return drama;
+        return Drama
+                .builder()
+                .id(dramaDTO.getId())
+                .name(dramaDTO.getName())
+                .synopsis(dramaDTO.getSynopsis())
+                .releaseDate(dramaDTO.getReleaseDate())
+                .posterImgUrl(dramaDTO.getPosterImgUrl())
+                .episodeNumber(dramaDTO.getEpisodeNumber())
+                .genre(genre)
+                .casting(casting)
+                .reviews(reviews)
+                .rates(dramaDTO.getRates())
+                .build();
     }
 
 
     public static Actor toActor(ActorDTO actorDTO, List<User> followers, List<Drama> dramas){
-        Actor actor = new Actor();
-        actor.setId(actorDTO.getId());
-        actor.setFirstName(actorDTO.getFirstName());
-        actor.setLastName(actorDTO.getLastName());
-        actor.setSurname(actorDTO.getSurname());
-        actor.setGender(actorDTO.getGender());
-        actor.setBirthDate(actorDTO.getBirthDate());
-        actor.setPictureUrl(actorDTO.getPictureUrl());
-        actor.setNationality(actorDTO.getNationality());
-        actor.setBio(actorDTO.getBio());
-        actor.setFollowers(followers);
-        actor.setDramas(dramas);
+        return Actor
+                .builder()
+                .id(actorDTO.getId())
+                .firstName(actorDTO.getFirstName())
+                .lastName(actorDTO.getLastName())
+                .surname(actorDTO.getSurname())
+                .gender(actorDTO.getGender())
+                .birthDate(actorDTO.getBirthDate())
+                .pictureUrl(actorDTO.getPictureUrl())
+                .nationality(actorDTO.getNationality())
+                .bio(actorDTO.getBio())
+                .followers(followers)
+                .dramas(dramas)
+                .build();
+    }
 
-        return actor;
+    public static Genre toGenre(GenreDTO genreDTO, List<Drama> dramas){
+        return Genre
+                .builder()
+                .id(genreDTO.getId())
+                .name(genreDTO.getName())
+                .dramas(dramas)
+                .build();
+
     }
 
 
