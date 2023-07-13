@@ -10,37 +10,10 @@ import java.util.List;
 
 public class DTOMapper {
 
-    public static User toUser(UserDTO userDTO){
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setUsername(userDTO.getUsername());
-        user.setProfilePicImgUrl(userDTO.getProfilePicImgUrl());
-        user.setBio(userDTO.getBio());
-        user.setGender(userDTO.getGender());
-        user.setBirthDate(userDTO.getBirthDate());
-        return user;
-    }
-
-    public static User toUser(UserDTO userDTO, String password){
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setUsername(userDTO.getUsername());
-        user.setProfilePicImgUrl(userDTO.getProfilePicImgUrl());
-        user.setBio(userDTO.getBio());
-        user.setGender(userDTO.getGender());
-        user.setBirthDate(userDTO.getBirthDate());
-
-        user.setPassword(password);
-
-        return user;
-    }
 
     public static User toUser(
             UserDTO userDTO,
+            String password,
             List<Drama> favoriteDramas,
             List<Drama> planToWatch,
             List<Review> reviews,
@@ -57,7 +30,7 @@ public class DTOMapper {
         user.setBio(userDTO.getBio());
         user.setGender(userDTO.getGender());
         user.setBirthDate(userDTO.getBirthDate());
-
+        user.setPassword(password);
         user.setFavoriteDramas(favoriteDramas);
         user.setPlanToWatch(planToWatch);
         user.setReviews(reviews);
@@ -82,17 +55,6 @@ public class DTOMapper {
         return review;
     }
 
-    public static Review toReview(ReviewDTO reviewDTO){
-        Review review = new Review();
-
-        review.setId(reviewDTO.getId());
-        review.setTitle(reviewDTO.getTitle());
-        review.setText(reviewDTO.getText());
-        review.setRating(reviewDTO.getRating());
-        review.setInstant(reviewDTO.getInstant());
-
-        return review;
-    }
 
     public static Drama toDrama(DramaDTO dramaDTO, Genre genre, List<Actor> casting, List<Review> reviews){
         Drama drama = new Drama();
@@ -109,17 +71,6 @@ public class DTOMapper {
         return drama;
     }
 
-    public static Drama toDrama(DramaDTO dramaDTO){
-        Drama drama = new Drama();
-        drama.setId(dramaDTO.getId());
-        drama.setName(dramaDTO.getName());
-        drama.setSynopsis(dramaDTO.getSynopsis());
-        drama.setReleaseDate(dramaDTO.getReleaseDate());
-        drama.setPosterImgUrl(dramaDTO.getPosterImgUrl());
-        drama.setEpisodeNumber(dramaDTO.getEpisodeNumber());
-        drama.setRates(dramaDTO.getRates());
-        return drama;
-    }
 
     public static Actor toActor(ActorDTO actorDTO, List<User> followers, List<Drama> dramas){
         Actor actor = new Actor();
