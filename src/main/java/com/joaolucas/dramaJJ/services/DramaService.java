@@ -4,8 +4,10 @@ import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
+import com.joaolucas.dramaJJ.domain.entities.Genre;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
+import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class DramaService {
 
     @Autowired
     private ActorRepository actorRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
 
     public List<DramaDTO> findAll(){
 
@@ -104,5 +109,7 @@ public class DramaService {
         return list;
 
     }
+
+
 
 }

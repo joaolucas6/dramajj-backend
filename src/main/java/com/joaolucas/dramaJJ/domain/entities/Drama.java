@@ -36,9 +36,8 @@ public class Drama {
     @Column(name = "episode_number")
     private Integer episodeNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id")
-    private Genre genre;
+    @ManyToMany(mappedBy = "dramas")
+    private List<Genre> genres;
 
     @ManyToMany
     @JoinTable(
