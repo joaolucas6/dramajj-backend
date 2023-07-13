@@ -1,11 +1,9 @@
 package com.joaolucas.dramaJJ.utils;
 
+import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
-import com.joaolucas.dramaJJ.domain.entities.Actor;
-import com.joaolucas.dramaJJ.domain.entities.Drama;
-import com.joaolucas.dramaJJ.domain.entities.Review;
-import com.joaolucas.dramaJJ.domain.entities.User;
+import com.joaolucas.dramaJJ.domain.entities.*;
 
 import java.util.List;
 
@@ -95,8 +93,33 @@ public class DTOMapper {
         return review;
     }
 
+    public static Drama toDrama(DramaDTO dramaDTO, Genre genre, List<Actor> casting, List<Review> reviews){
+        Drama drama = new Drama();
+        drama.setId(dramaDTO.getId());
+        drama.setName(dramaDTO.getName());
+        drama.setSynopsis(dramaDTO.getSynopsis());
+        drama.setReleaseDate(dramaDTO.getReleaseDate());
+        drama.setPosterImgUrl(dramaDTO.getPosterImgUrl());
+        drama.setEpisodeNumber(dramaDTO.getEpisodeNumber());
+        drama.setGenre(genre);
+        drama.setCasting(casting);
+        drama.setReviews(reviews);
+        drama.setRates(dramaDTO.getRates());
+        return drama;
+    }
+
+    public static Drama toDrama(DramaDTO dramaDTO){
+        Drama drama = new Drama();
+        drama.setId(dramaDTO.getId());
+        drama.setName(dramaDTO.getName());
+        drama.setSynopsis(dramaDTO.getSynopsis());
+        drama.setReleaseDate(dramaDTO.getReleaseDate());
+        drama.setPosterImgUrl(dramaDTO.getPosterImgUrl());
+        drama.setEpisodeNumber(dramaDTO.getEpisodeNumber());
+        drama.setRates(dramaDTO.getRates());
+        return drama;
+    }
+
     
-
-
 
 }
