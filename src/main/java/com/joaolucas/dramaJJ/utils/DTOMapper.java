@@ -1,5 +1,6 @@
 package com.joaolucas.dramaJJ.utils;
 
+import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
@@ -120,6 +121,22 @@ public class DTOMapper {
         return drama;
     }
 
-    
+    public static Actor toActor(ActorDTO actorDTO, List<User> followers, List<Drama> dramas){
+        Actor actor = new Actor();
+        actor.setId(actorDTO.getId());
+        actor.setFirstName(actorDTO.getFirstName());
+        actor.setLastName(actorDTO.getLastName());
+        actor.setSurname(actorDTO.getSurname());
+        actor.setGender(actorDTO.getGender());
+        actor.setBirthDate(actorDTO.getBirthDate());
+        actor.setPictureUrl(actorDTO.getPictureUrl());
+        actor.setNationality(actorDTO.getNationality());
+        actor.setBio(actorDTO.getBio());
+        actor.setFollowers(followers);
+        actor.setDramas(dramas);
+
+        return actor;
+    }
+
 
 }
