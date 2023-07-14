@@ -1,11 +1,14 @@
 package com.joaolucas.dramaJJ.services;
 
+import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
+import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.User;
 import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
+import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ public class UserService {
 
     @Autowired
     private DramaRepository dramaRepository;
+
+    @Autowired
+    private ActorRepository actorRepository;
 
 
     public List<UserDTO> findAll() {
@@ -145,6 +151,25 @@ public class UserService {
 
     }
 
+    public List<ActorDTO> followActor(Long followerId, Long actorId){
+        User follower = userRepository.findById(followerId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", followerId)));
+        Actor actor = actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId)));
+
+        if(follower.getFollowingActors().contains(actor) || actor.getFollowers().contains(follower)) throw new ConflictException("User is already following");
+
+        follower.getFollowingActors().add(actor);
+        actor.getFollowers().add(follower);
+
+        userRepository.save(follower);
+        actorRepository.save(actor);
+
+        List<ActorDTO> list = new ArrayList<>();
+        follower.getFollowingActors().forEach(listActor -> list.add(new ActorDTO(listActor)));
+
+        return list;
+    }
+
+
     public List<User> unfollow(Long unfollowingId, Long unfollowedId) throws Exception {
 
         User unfollowing = userRepository.findById(unfollowingId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowingId)));
@@ -160,6 +185,24 @@ public class UserService {
 
         return unfollowing.getFollowing();
 
+    }
+
+    public List<ActorDTO> unfollowActor(Long unfollowingId, Long actorId){
+        User follower = userRepository.findById(unfollowingId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowingId)));
+        Actor actor = actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId)));
+
+        if(!follower.getFollowingActors().contains(actor) || !actor.getFollowers().contains(follower)) throw new ConflictException("User is not following provided actor");
+
+        follower.getFollowingActors().remove(actor);
+        actor.getFollowers().remove(follower);
+
+        userRepository.save(follower);
+        actorRepository.save(actor);
+
+        List<ActorDTO> list = new ArrayList<>();
+        follower.getFollowingActors().forEach(listActor -> list.add(new ActorDTO(listActor)));
+
+        return list;
     }
 
 
