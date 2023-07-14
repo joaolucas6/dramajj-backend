@@ -4,6 +4,8 @@ import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.User;
+import com.joaolucas.dramaJJ.exceptions.ConflictException;
+import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +31,13 @@ public class UserService {
     }
 
     public UserDTO findById(Long id){
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", id)));
         return new UserDTO(user);
     }
 
     public UserDTO update(Long id, UserDTO userDTO){
 
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", id)));
 
         if(userDTO.getFirstName() != null) user.setFirstName(userDTO.getFirstName());
         if(userDTO.getLastName() != null) user.setLastName(userDTO.getLastName());
@@ -53,17 +55,17 @@ public class UserService {
     }
 
     public void delete(Long id){
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", id)));
         userRepository.delete(user);
     }
 
     public List<DramaDTO> addFavoriteDrama(Long userId, Long dramaId) throws Exception {
 
 
-        User user = userRepository.findById(userId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
-        if(user.getFavoriteDramas().contains(drama)) throw new Exception("");
+        if(user.getFavoriteDramas().contains(drama)) throw new Exception("Drama is already in Favorite Dramas list");
 
         user.getFavoriteDramas().add(drama);
         userRepository.save(user);
@@ -76,10 +78,10 @@ public class UserService {
     }
 
     public List<DramaDTO> removeFavoriteDrama(Long userId, Long dramaId) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
-        if(!user.getFavoriteDramas().contains(drama)) throw new Exception("");
+        if(!user.getFavoriteDramas().contains(drama)) throw new ConflictException("Drama was not found in Favorite Dramas list");
 
         user.getFavoriteDramas().remove(drama);
         userRepository.save(user);
@@ -93,10 +95,10 @@ public class UserService {
 
     public List<DramaDTO> addPlanToWatch(Long userId, Long dramaId) throws Exception {
 
-        User user = userRepository.findById(userId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
-        if(user.getPlanToWatch().contains(drama)) throw new Exception("");
+        if(user.getPlanToWatch().contains(drama)) throw new Exception("Drama is already in Plan to Watch list");
 
         user.getPlanToWatch().add(drama);
         userRepository.save(user);
@@ -110,10 +112,11 @@ public class UserService {
     }
 
     public List<DramaDTO> removePlanToWatch(Long userId, Long dramaId) throws Exception {
-        User user = userRepository.findById(userId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
-        if(!user.getPlanToWatch().contains(drama)) throw new Exception("");
+
+        if(!user.getPlanToWatch().contains(drama)) throw new Exception("Drama was not found in Favorite Dramas list");
 
         user.getPlanToWatch().remove(drama);
         userRepository.save(user);
@@ -127,10 +130,10 @@ public class UserService {
 
     public List<User> follow(Long followerId, Long followedId) throws Exception {
 
-        User follower = userRepository.findById(followerId).orElseThrow();
-        User followed = userRepository.findById(followedId).orElseThrow();
+        User follower = userRepository.findById(followerId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", followerId)));
+        User followed = userRepository.findById(followedId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", followedId)));
 
-        if(follower.getFollowing().contains(followed) || followed.getFollowers().contains(follower)) throw new Exception("");
+        if(follower.getFollowing().contains(followed) || followed.getFollowers().contains(follower)) throw new ConflictException("User is already following");
 
         follower.getFollowing().add(followed);
         followed.getFollowers().add(follower);
@@ -142,12 +145,12 @@ public class UserService {
 
     }
 
-    public List<User> unfollow(Long followerId, Long followedId) throws Exception {
+    public List<User> unfollow(Long unfollowingId, Long unfollowedId) throws Exception {
 
-        User unfollowing = userRepository.findById(followerId).orElseThrow();
-        User unfollowed = userRepository.findById(followedId).orElseThrow();
+        User unfollowing = userRepository.findById(unfollowingId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowingId)));
+        User unfollowed = userRepository.findById(unfollowedId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowedId)));
 
-        if(!unfollowing.getFollowing().contains(unfollowed) || !unfollowed.getFollowers().contains(unfollowing)) throw new Exception("");
+        if(!unfollowing.getFollowing().contains(unfollowed) || !unfollowed.getFollowers().contains(unfollowing)) throw new ConflictException("User is not following");
 
         unfollowing.getFollowing().remove(unfollowed);
         unfollowed.getFollowers().remove(unfollowing);
