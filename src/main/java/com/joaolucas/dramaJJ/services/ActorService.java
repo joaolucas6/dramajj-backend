@@ -2,6 +2,7 @@ package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
+import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class ActorService {
     }
 
     public ActorDTO findById(Long id){
-        return new ActorDTO(actorRepository.findById(id).orElseThrow());
+        return new ActorDTO(actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))));
     }
 
     public ActorDTO create(ActorDTO actorDTO){
@@ -32,7 +33,7 @@ public class ActorService {
     }
 
     public ActorDTO update(Long id, ActorDTO actorDTO){
-        Actor actor = actorRepository.findById(id).orElseThrow();
+        Actor actor = actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id)));
         if(actorDTO.getFirstName() != null) actor.setFirstName(actorDTO.getFirstName());
         if(actorDTO.getLastName() != null) actor.setLastName(actorDTO.getLastName());
         if(actorDTO.getSurname() != null) actor.setSurname(actorDTO.getSurname());
