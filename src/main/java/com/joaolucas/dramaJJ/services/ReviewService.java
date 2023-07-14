@@ -4,6 +4,7 @@ import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Review;
 import com.joaolucas.dramaJJ.domain.entities.User;
+import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.ReviewRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
@@ -32,14 +33,14 @@ public class ReviewService {
     }
 
     public ReviewDTO findById(Long id){
-        return new ReviewDTO(reviewRepository.findById(id).orElseThrow());
+        return new ReviewDTO(reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Review with ID %d was not found", id))));
     }
 
     public ReviewDTO create(Long authorId, Long dramaId, ReviewDTO reviewDTO){
 
 
-        User user = userRepository.findById(authorId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        User user = userRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", authorId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
         Review review = DTOMapper.toReview(reviewDTO, user, drama);
 
         user.getReviews().add(review);
@@ -50,7 +51,7 @@ public class ReviewService {
 
     public ReviewDTO update(Long reviewId, ReviewDTO reviewDTO){
 
-        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ResourceNotFoundException(String.format("Review with ID %d was not found", reviewId)));
 
         if(reviewDTO.getTitle() != null) review.setTitle(reviewDTO.getTitle());
         if(reviewDTO.getText() != null) review.setText(reviewDTO.getText());
@@ -64,7 +65,7 @@ public class ReviewService {
     }
 
     public void delete(Long id){
-        Review review = reviewRepository.findById(id).orElseThrow();
+        Review review = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Review with ID %d was not found", id)));
         reviewRepository.delete(review);
     }
 }
