@@ -1,5 +1,6 @@
 package com.joaolucas.dramaJJ.exceptions.handler;
 
+import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ExceptionResponse;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleGenericException(Exception exception, WebRequest request){
+    public ResponseEntity<ExceptionResponse> handleGenericException(Exception exception){
 
         ExceptionResponse response = new ExceptionResponse();
         response.setTimestamp(new Date());
@@ -35,6 +36,19 @@ public class GlobalExceptionHandler {
         response.setTimestamp(new Date());
         response.setError(HttpStatus.NOT_FOUND.name());
         response.setErrorCode(HttpStatus.NOT_FOUND.value());
+        response.setMessage(exception.getMessage());
+
+        return ResponseEntity.status(response.getErrorCode()).body(response);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ExceptionResponse> handleConflictException(ConflictException exception){
+
+        ExceptionResponse response = new ExceptionResponse();
+
+        response.setTimestamp(new Date());
+        response.setError(HttpStatus.CONFLICT.name());
+        response.setErrorCode(HttpStatus.CONFLICT.value());
         response.setMessage(exception.getMessage());
 
         return ResponseEntity.status(response.getErrorCode()).body(response);
