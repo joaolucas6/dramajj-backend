@@ -6,6 +6,8 @@ import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Genre;
+import com.joaolucas.dramaJJ.exceptions.ConflictException;
+import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
@@ -38,7 +40,7 @@ public class DramaService {
     }
 
     public DramaDTO findById(Long id){
-        return new DramaDTO(dramaRepository.findById(id).orElseThrow());
+        return new DramaDTO(dramaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id))));
     }
 
     public DramaDTO create(DramaDTO dramaDTO){
@@ -51,7 +53,7 @@ public class DramaService {
     }
 
     public DramaDTO update(Long dramaId, DramaDTO dramaDTO){
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
         if(dramaDTO.getName() != null) drama.setName(dramaDTO.getName());
         if(dramaDTO.getSynopsis() != null) drama.setSynopsis(dramaDTO.getSynopsis());
@@ -71,10 +73,10 @@ public class DramaService {
 
     public List<ActorDTO> addActor(Long actorId, Long dramaId) throws Exception {
 
-        Actor actor = actorRepository.findById(actorId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        Actor actor = actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
-        if(actor.getDramas().contains(drama) || drama.getCasting().contains(actor)) throw new Exception("");
+        if(actor.getDramas().contains(drama) || drama.getCasting().contains(actor)) throw new ConflictException("Actor already in casting");
 
         actor.getDramas().add(drama);
         drama.getCasting().add(actor);
@@ -92,10 +94,10 @@ public class DramaService {
 
     public List<ActorDTO> removeActor(Long actorId, Long dramaId) throws Exception {
 
-        Actor actor = actorRepository.findById(actorId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
+        Actor actor = actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
-        if(!actor.getDramas().contains(drama) || !drama.getCasting().contains(actor)) throw new Exception("");
+        if(!actor.getDramas().contains(drama) || !drama.getCasting().contains(actor)) throw new ConflictException("Actor is was not found in casting");
 
         actor.getDramas().remove(drama);
         drama.getCasting().remove(actor);
@@ -112,9 +114,9 @@ public class DramaService {
     }
 
     public List<GenreDTO> addGenre(Long genreId, Long dramaId) throws Exception {
-        Genre genre = genreRepository.findById(genreId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
-        if(genre.getDramas().contains(drama) || drama.getGenres().contains(genre)) throw new Exception("");
+        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
+        if(genre.getDramas().contains(drama) || drama.getGenres().contains(genre)) throw new ConflictException("Genre is already in drama");
         genre.getDramas().add(drama);
         drama.getGenres().add(genre);
 
@@ -130,9 +132,9 @@ public class DramaService {
     }
 
     public List<GenreDTO> removeGenre(Long genreId, Long dramaId) throws Exception {
-        Genre genre = genreRepository.findById(genreId).orElseThrow();
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow();
-        if(!genre.getDramas().contains(drama) || !drama.getGenres().contains(genre)) throw new Exception("");
+        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
+        if(!genre.getDramas().contains(drama) || !drama.getGenres().contains(genre)) throw new ConflictException("Genre was not found in drama");
         genre.getDramas().remove(drama);
         drama.getGenres().remove(genre);
 
