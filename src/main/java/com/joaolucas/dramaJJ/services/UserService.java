@@ -21,6 +21,7 @@ public class UserService {
     @Autowired
     private DramaRepository dramaRepository;
 
+
     public List<UserDTO> findAll() {
         List<UserDTO> list = new ArrayList<>();
         userRepository.findAll().forEach(user -> list.add(new UserDTO(user)));
@@ -33,6 +34,7 @@ public class UserService {
     }
 
     public UserDTO update(Long id, UserDTO userDTO){
+
         User user = userRepository.findById(id).orElseThrow();
 
         if(userDTO.getFirstName() != null) user.setFirstName(userDTO.getFirstName());
@@ -46,6 +48,7 @@ public class UserService {
         userRepository.save(user);
 
         return new UserDTO(user);
+
 
     }
 
@@ -157,24 +160,4 @@ public class UserService {
     }
 
 
-    /*
-    *
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
-    private String profilePicImgUrl;
-    private String bio;
-    private String gender;
-    private Date birthDate;
-    private List<Drama> favoriteDramas = new ArrayList<>();
-    private List<Drama> planToWatch = new ArrayList<>();
-    private List<Review> reviews = new ArrayList<>();
-    private List<User> followers = new ArrayList<>();
-    private List<User> following = new ArrayList<>();
-    private List<Actor> followingActors = new ArrayList<>();
-    *
-    *
-    * */
 }
