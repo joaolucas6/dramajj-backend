@@ -1,6 +1,7 @@
 package com.joaolucas.dramaJJ.exceptions.handler;
 
 import com.joaolucas.dramaJJ.exceptions.ExceptionResponse;
+import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -25,4 +26,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(response.getErrorCode()).body(response);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleResourceNotFoundException(ResourceNotFoundException exception){
+
+        ExceptionResponse response = new ExceptionResponse();
+
+        response.setTimestamp(new Date());
+        response.setError(HttpStatus.NOT_FOUND.name());
+        response.setErrorCode(HttpStatus.NOT_FOUND.value());
+        response.setMessage(exception.getMessage());
+
+        return ResponseEntity.status(response.getErrorCode()).body(response);
+    }
+
 }
