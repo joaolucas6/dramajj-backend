@@ -134,7 +134,7 @@ public class UserService {
         return list;
     }
 
-    public List<User> follow(Long followerId, Long followedId) throws Exception {
+    public List<UserDTO> follow(Long followerId, Long followedId) throws Exception {
 
         User follower = userRepository.findById(followerId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", followerId)));
         User followed = userRepository.findById(followedId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", followedId)));
@@ -147,7 +147,10 @@ public class UserService {
         userRepository.save(follower);
         userRepository.save(followed);
 
-        return follower.getFollowing();
+        List<UserDTO> list = new ArrayList<>();
+        follower.getFollowing().forEach(user -> list.add(new UserDTO(user)));
+
+        return list;
 
     }
 
@@ -170,7 +173,7 @@ public class UserService {
     }
 
 
-    public List<User> unfollow(Long unfollowingId, Long unfollowedId) throws Exception {
+    public List<UserDTO> unfollow(Long unfollowingId, Long unfollowedId) throws Exception {
 
         User unfollowing = userRepository.findById(unfollowingId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowingId)));
         User unfollowed = userRepository.findById(unfollowedId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowedId)));
@@ -183,7 +186,10 @@ public class UserService {
         userRepository.save(unfollowing);
         userRepository.save(unfollowed);
 
-        return unfollowing.getFollowing();
+        List<UserDTO> list = new ArrayList<>();
+        unfollowing.getFollowing().forEach(user -> list.add(new UserDTO(user)));
+
+        return list;
 
     }
 
