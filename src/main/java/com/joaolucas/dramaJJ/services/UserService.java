@@ -71,7 +71,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId)));
         Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
 
-        if(user.getFavoriteDramas().contains(drama)) throw new Exception("Drama is already in Favorite Dramas list");
+        if(user.getFavoriteDramas().contains(drama)) throw new ConflictException("Drama is already in Favorite Dramas list");
 
         user.getFavoriteDramas().add(drama);
         userRepository.save(user);
