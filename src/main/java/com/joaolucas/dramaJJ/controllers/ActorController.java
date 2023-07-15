@@ -42,7 +42,7 @@ public class ActorController {
         return ResponseEntity.ok().build();
     }
 
-    
+
 
 
 }
