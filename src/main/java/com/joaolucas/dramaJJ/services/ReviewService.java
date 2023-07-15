@@ -58,7 +58,7 @@ public class ReviewService {
         if(reviewDTO.getRating() != null) review.setRating(reviewDTO.getRating());
 
         reviewRepository.save(review);
-
+        
 
 
         return new ReviewDTO(review);
@@ -66,6 +66,9 @@ public class ReviewService {
 
     public void delete(Long id){
         Review review = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Review with ID %d was not found", id)));
+
+        review.getAuthor().getReviews().remove(review);
+
         reviewRepository.delete(review);
     }
 }
