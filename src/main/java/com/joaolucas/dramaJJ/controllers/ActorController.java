@@ -32,12 +32,12 @@ public class ActorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ActorDTO> update(Long id, ActorDTO actorDTO){
+    public ResponseEntity<ActorDTO> update(@PathVariable Long id, @RequestBody ActorDTO actorDTO){
         return ResponseEntity.ok(actorService.update(id, actorDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(Long id){
+    public ResponseEntity delete(@PathVariable Long id){
         actorService.delete(id);
         return ResponseEntity.ok().build();
     }
