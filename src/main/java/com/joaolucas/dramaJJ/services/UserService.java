@@ -2,14 +2,17 @@ package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
+import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
+import com.joaolucas.dramaJJ.domain.entities.Review;
 import com.joaolucas.dramaJJ.domain.entities.User;
 import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
+import com.joaolucas.dramaJJ.repositories.ReviewRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,9 @@ public class UserService {
 
     @Autowired
     private ActorRepository actorRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
 
     public List<UserDTO> findAll() {
@@ -62,6 +68,15 @@ public class UserService {
 
     public void delete(Long id){
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", id)));
+
+        List<Review> reviews = user.getReviews();
+
+        reviews.forEach(review -> {
+            reviewRepository.delete(review);
+        });
+
+
+
         userRepository.delete(user);
     }
 
