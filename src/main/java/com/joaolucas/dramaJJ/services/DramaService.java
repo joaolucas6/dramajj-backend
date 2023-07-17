@@ -6,11 +6,13 @@ import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Genre;
+import com.joaolucas.dramaJJ.domain.entities.Review;
 import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
+import com.joaolucas.dramaJJ.repositories.ReviewRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class DramaService {
 
     @Autowired
     private GenreRepository genreRepository;
+
+    @Autowired
+    private ReviewService reviewService;
 
     public List<DramaDTO> findAll(){
 
@@ -68,7 +73,27 @@ public class DramaService {
     }
 
     public void delete(Long id){
-        dramaRepository.deleteById(id);
+        Drama drama = dramaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id)));
+
+        List<Actor> casting = drama.getCasting();
+        List<Review> reviews = drama.getReviews();
+        List<Genre> genres = drama.getGenres();
+
+        casting.forEach(actor -> {
+            actor.getDramas().remove(drama);
+            actorRepository.save(actor);
+        });
+
+        reviews.forEach(review -> {
+            reviewService.delete(review.getId());
+        });
+
+        genres.forEach(genre -> {
+            genre.getDramas().remove(drama);
+            genreRepository.save(genre);
+        });
+
+        dramaRepository.delete(drama);
     }
 
     public List<ActorDTO> addActor(Long actorId, Long dramaId) throws Exception {
