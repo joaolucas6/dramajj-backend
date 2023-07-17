@@ -67,9 +67,18 @@ public class ReviewService {
     }
 
     public void delete(Long id){
+
         Review review = reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Review with ID %d was not found", id)));
 
-        review.getAuthor().getReviews().remove(review);
+        User author = review.getAuthor();
+        Drama drama = review.getDrama();
+
+        author.getReviews().remove(review);
+        drama.getReviews().remove(review);
+
+
+        userRepository.save(author);
+        dramaRepository.save(drama);
 
         reviewRepository.delete(review);
     }

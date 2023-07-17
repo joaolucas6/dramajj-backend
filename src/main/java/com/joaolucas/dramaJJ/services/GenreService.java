@@ -56,7 +56,7 @@ public class GenreService {
             drama.getGenres().remove(genre);
             dramaRepository.save(drama);
         });
-        
+
         genreRepository.delete(genre);
     }
 
