@@ -2,8 +2,12 @@ package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
+import com.joaolucas.dramaJJ.domain.entities.Drama;
+import com.joaolucas.dramaJJ.domain.entities.User;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
+import com.joaolucas.dramaJJ.repositories.DramaRepository;
+import com.joaolucas.dramaJJ.repositories.UserRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,12 @@ public class ActorService {
 
     @Autowired
     private ActorRepository actorRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private DramaRepository dramaRepository;
 
     public List<ActorDTO> findAll(){
         List<ActorDTO> list = new ArrayList<>();
@@ -49,6 +59,20 @@ public class ActorService {
     }
 
     public void delete(Long id){
+        Actor actor = actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id)));
+
+        List<User> followers = actor.getFollowers();
+        List<Drama> dramas = actor.getDramas();
+
+
+        followers.forEach(follower -> {
+            follower.getFollowingActors().remove(actor);
+            userRepository.save(follower);
+        });
+        dramas.forEach(drama -> {
+            drama.getCasting().remove(actor);
+            dramaRepository.save(drama);
+        });
         actorRepository.deleteById(id);
     }
 
