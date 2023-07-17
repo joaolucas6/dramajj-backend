@@ -1,8 +1,10 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
+import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Genre;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
+import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class GenreService {
 
     @Autowired
     private GenreRepository genreRepository;
+
+    @Autowired
+    private DramaRepository dramaRepository;
 
     public List<GenreDTO> findAll(){
         List<GenreDTO> list = new ArrayList<>();
@@ -43,7 +48,16 @@ public class GenreService {
     }
 
     public void delete(Long id){
-        genreRepository.deleteById(id);
+        Genre genre = genreRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id)));
+
+        List<Drama> dramas = genre.getDramas();
+
+        dramas.forEach(drama -> {
+            drama.getGenres().remove(genre);
+            dramaRepository.save(drama);
+        });
+        
+        genreRepository.delete(genre);
     }
 
 }
