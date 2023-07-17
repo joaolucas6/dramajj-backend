@@ -22,6 +22,10 @@ public class ActorDTO {
     private List<Long> followersId = new ArrayList<>();
     private List<Long> dramasId = new ArrayList<>();
 
+    public ActorDTO(){
+
+    }
+
     public ActorDTO(Actor actor){
 
         setId(actor.getId());

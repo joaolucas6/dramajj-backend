@@ -17,7 +17,7 @@ public class DramaDTO {
     private Date releaseDate;
     private String posterImgUrl;
     private Integer episodeNumber;
-    private Long genreId;
+    private List<Long> genresId = new ArrayList<>();
     private List<Long> castingId = new ArrayList<>();
     private List<Long> reviewsId = new ArrayList<>();
     private List<Double> rates = new ArrayList<>();
@@ -34,7 +34,7 @@ public class DramaDTO {
         setReleaseDate(drama.getReleaseDate());
         setPosterImgUrl(drama.getPosterImgUrl());
         setEpisodeNumber(drama.getEpisodeNumber());
-        setGenreId(drama.getGenre().getId());
+        drama.getGenres().forEach(genre -> genresId.add(genre.getId()));
         setRates(drama.getRates());
         drama.getCasting().forEach(actor -> castingId.add(actor.getId()));
         drama.getReviews().forEach(review -> reviewsId.add(review.getId()));

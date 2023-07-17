@@ -6,10 +6,12 @@ import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class GenreService {
 
     @Autowired
