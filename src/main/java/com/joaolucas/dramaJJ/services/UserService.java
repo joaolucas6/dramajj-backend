@@ -70,11 +70,28 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", id)));
 
         List<Review> reviews = user.getReviews();
+        List<User> followers = user.getFollowers();
+        List<User> followings = user.getFollowing();
+        List<Actor> followingActor = user.getFollowingActors();
 
         reviews.forEach(review -> {
             reviewRepository.delete(review);
         });
 
+        followers.forEach(follower -> {
+            follower.getFollowing().remove(user);
+            userRepository.save(follower);
+        });
+
+        followings.forEach(following -> {
+            following.getFollowers().remove(user);
+            userRepository.save(following);
+        });
+
+        followingActor.forEach(actor -> {
+            actor.getFollowers().remove(user);
+            actorRepository.save(actor);
+        });
 
 
         userRepository.delete(user);
