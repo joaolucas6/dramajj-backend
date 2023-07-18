@@ -69,12 +69,12 @@ public class UserController {
     }
 
     @PostMapping("/follow-actor/{followerId}/{actorId}")
-    public ResponseEntity<List<ActorDTO>> followActor(Long followerId, Long actorId){
+    public ResponseEntity<List<ActorDTO>> followActor(@PathVariable Long followerId, @PathVariable Long actorId){
         return ResponseEntity.ok(userService.followActor(followerId, actorId));
     }
 
     @DeleteMapping("/unfollow-actor/{unfollowingId}/{actorId}")
-    public ResponseEntity<List<ActorDTO>> unfollowActor(Long unfollowingId, Long actorId){
+    public ResponseEntity<List<ActorDTO>> unfollowActor(@PathVariable Long unfollowingId, @PathVariable Long actorId){
         return ResponseEntity.ok(userService.unfollowActor(unfollowingId, actorId));
     }
 

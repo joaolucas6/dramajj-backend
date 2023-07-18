@@ -48,7 +48,7 @@ public class ReviewService {
         user.getReviews().add(review);
         drama.getReviews().add(review);
 
-        return new ReviewDTO(review);
+        return new ReviewDTO(reviewRepository.save(review));
     }
 
     public ReviewDTO update(Long reviewId, ReviewDTO reviewDTO){
