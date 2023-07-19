@@ -3,12 +3,15 @@ package com.joaolucas.dramaJJ.domain.dto;
 
 import com.joaolucas.dramaJJ.domain.entities.Genre;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
-public class GenreDTO {
+public class GenreDTO extends RepresentationModel<GenreDTO> {
 
     private Long id;
     private String name;

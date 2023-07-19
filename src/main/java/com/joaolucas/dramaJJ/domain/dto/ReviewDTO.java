@@ -2,11 +2,14 @@ package com.joaolucas.dramaJJ.domain.dto;
 
 import com.joaolucas.dramaJJ.domain.entities.Review;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
-public class ReviewDTO {
+public class ReviewDTO extends RepresentationModel<ReviewDTO> {
 
     private Long id;
     private String title;

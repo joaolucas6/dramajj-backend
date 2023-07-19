@@ -2,13 +2,16 @@ package com.joaolucas.dramaJJ.domain.dto;
 
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
-public class ActorDTO {
+public class ActorDTO extends RepresentationModel<ActorDTO> {
 
     private Long id;
     private String firstName;
