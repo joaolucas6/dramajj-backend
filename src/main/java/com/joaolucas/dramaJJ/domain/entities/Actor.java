@@ -2,6 +2,7 @@ package com.joaolucas.dramaJJ.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id")
-public class Actor {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class Actor extends RepresentationModel<Actor> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

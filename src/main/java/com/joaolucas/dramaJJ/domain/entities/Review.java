@@ -2,6 +2,7 @@ package com.joaolucas.dramaJJ.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
 
@@ -11,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id")
-public class Review {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class Review extends RepresentationModel<Review> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
