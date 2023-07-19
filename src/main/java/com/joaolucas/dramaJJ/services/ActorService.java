@@ -1,5 +1,6 @@
 package com.joaolucas.dramaJJ.services;
 
+import com.joaolucas.dramaJJ.controllers.ActorController;
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class ActorService {
@@ -30,16 +34,29 @@ public class ActorService {
     public List<ActorDTO> findAll(){
         List<ActorDTO> list = new ArrayList<>();
         actorRepository.findAll().forEach(actor -> list.add(new ActorDTO(actor)));
+
+        list.forEach(actorDTO -> {
+            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
+        });
+
         return list;
     }
 
     public ActorDTO findById(Long id){
-        return new ActorDTO(actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))));
+        ActorDTO actorDTO = new ActorDTO(actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))));
+
+        actorDTO.add(linkTo(methodOn(ActorController.class).findById(id)).withSelfRel());
+
+        return actorDTO;
     }
 
     public ActorDTO create(ActorDTO actorDTO){
         Actor actor = DTOMapper.toActor(actorDTO, List.of(), List.of());
-        return new ActorDTO(actorRepository.save(actor));
+        ActorDTO responseActorDTO = new ActorDTO(actorRepository.save(actor));
+
+        responseActorDTO.add(linkTo(methodOn(ActorController.class).findById(responseActorDTO.getId())).withSelfRel());
+
+        return responseActorDTO;
     }
 
     public ActorDTO update(Long id, ActorDTO actorDTO){
@@ -53,9 +70,11 @@ public class ActorService {
         if(actorDTO.getNationality() != null) actor.setNationality(actorDTO.getNationality());
         if(actorDTO.getBio() != null) actor.setBio(actorDTO.getBio());
 
-        actorRepository.save(actor);
+        ActorDTO updatedActorDTO = new ActorDTO(actorRepository.save(actor));
 
-        return new ActorDTO(actor);
+        updatedActorDTO.add(linkTo(methodOn(ActorController.class).findById(updatedActorDTO.getId())).withSelfRel());
+
+        return updatedActorDTO;
     }
 
     public void delete(Long id){
