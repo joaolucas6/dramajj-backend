@@ -1,5 +1,6 @@
 package com.joaolucas.dramaJJ.services;
 
+import com.joaolucas.dramaJJ.controllers.ReviewController;
 import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Review;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class ReviewService {
@@ -31,11 +35,21 @@ public class ReviewService {
     public List<ReviewDTO> findAll(){
         List<ReviewDTO> list = new ArrayList<>();
         reviewRepository.findAll().forEach(review -> list.add(new ReviewDTO(review)));
+
+        list.forEach(reviewDTO -> {
+            reviewDTO.add(linkTo(methodOn(ReviewController.class).findById(reviewDTO.getId())).withSelfRel());
+        });
+
         return list;
     }
 
     public ReviewDTO findById(Long id){
-        return new ReviewDTO(reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Review with ID %d was not found", id))));
+
+        ReviewDTO reviewDTO = new ReviewDTO(reviewRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Review with ID %d was not found", id))));
+
+        reviewDTO.add(linkTo(methodOn(ReviewController.class).findById(id)).withSelfRel());
+
+        return reviewDTO;
     }
 
     public ReviewDTO create(Long authorId, Long dramaId, ReviewDTO reviewDTO){
@@ -48,7 +62,11 @@ public class ReviewService {
         user.getReviews().add(review);
         drama.getReviews().add(review);
 
-        return new ReviewDTO(reviewRepository.save(review));
+        ReviewDTO responseReviewDTO = new ReviewDTO(reviewRepository.save(review));
+
+        responseReviewDTO.add(linkTo(methodOn(ReviewController.class).findById(responseReviewDTO.getId())).withSelfRel());
+
+        return responseReviewDTO;
     }
 
     public ReviewDTO update(Long reviewId, ReviewDTO reviewDTO){
@@ -61,9 +79,11 @@ public class ReviewService {
 
         reviewRepository.save(review);
         
+        ReviewDTO updatedReviewDTO = new ReviewDTO(review);
 
+        updatedReviewDTO.add(linkTo(methodOn(ReviewController.class).findById(reviewId)).withSelfRel());
 
-        return new ReviewDTO(review);
+        return updatedReviewDTO;
     }
 
     public void delete(Long id){
