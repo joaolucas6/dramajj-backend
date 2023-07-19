@@ -1,5 +1,8 @@
 package com.joaolucas.dramaJJ.services;
 
+import com.joaolucas.dramaJJ.controllers.ActorController;
+import com.joaolucas.dramaJJ.controllers.DramaController;
+import com.joaolucas.dramaJJ.controllers.GenreController;
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
@@ -19,6 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class DramaService {
@@ -41,11 +47,20 @@ public class DramaService {
 
         dramaRepository.findAll().forEach(drama -> list.add(new DramaDTO(drama)));
 
+        list.forEach(dramaDTO -> {
+            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
+        });
+
         return list;
     }
 
     public DramaDTO findById(Long id){
-        return new DramaDTO(dramaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id))));
+
+        DramaDTO dramaDTO = new DramaDTO(dramaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id))));
+
+        dramaDTO.add(linkTo(methodOn(DramaController.class).findById(id)).withSelfRel());
+
+        return dramaDTO;
     }
 
     public DramaDTO create(DramaDTO dramaDTO){
@@ -54,7 +69,11 @@ public class DramaService {
 
         dramaRepository.save(drama);
 
-        return new DramaDTO(drama);
+        DramaDTO responseDramaDTO = new DramaDTO(drama);
+
+        responseDramaDTO.add(linkTo(methodOn(DramaController.class).findById(responseDramaDTO.getId())).withSelfRel());
+
+        return responseDramaDTO;
     }
 
     public DramaDTO update(Long dramaId, DramaDTO dramaDTO){
@@ -66,9 +85,11 @@ public class DramaService {
         if(dramaDTO.getPosterImgUrl() != null) drama.setPosterImgUrl(dramaDTO.getPosterImgUrl());
         if(dramaDTO.getEpisodeNumber() != null) drama.setEpisodeNumber(dramaDTO.getEpisodeNumber());
 
-        dramaRepository.save(drama);
+        DramaDTO updatedDramaDTO = new DramaDTO(dramaRepository.save(drama));
 
-        return new DramaDTO(drama);
+        updatedDramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaId)).withSelfRel());
+
+        return updatedDramaDTO;
 
     }
 
@@ -113,6 +134,10 @@ public class DramaService {
 
         drama.getCasting().forEach(castingActor -> list.add(new ActorDTO(castingActor)));
 
+        list.forEach(actorDTO -> {
+            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
+        });
+
         return list;
 
     }
@@ -134,6 +159,10 @@ public class DramaService {
 
         drama.getCasting().forEach(castingActor -> list.add(new ActorDTO(castingActor)));
 
+        list.forEach(actorDTO -> {
+            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
+        });
+
         return list;
 
     }
@@ -152,6 +181,10 @@ public class DramaService {
 
         drama.getGenres().forEach(listGenre -> list.add(new GenreDTO(listGenre)));
 
+        list.forEach(genreDTO -> {
+            genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
+        });
+
         return list;
 
     }
@@ -169,6 +202,10 @@ public class DramaService {
         List<GenreDTO> list = new ArrayList<>();
 
         drama.getGenres().forEach(listGenre -> list.add(new GenreDTO(listGenre)));
+
+        list.forEach(genreDTO -> {
+            genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
+        });
 
         return list;
 
