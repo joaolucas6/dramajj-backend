@@ -12,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id", callSuper = false)
-public class Review extends RepresentationModel<Review> {
+@EqualsAndHashCode(of = "id")
+public class Review{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id", callSuper = false)
-public class Genre extends RepresentationModel<Genre> {
+@EqualsAndHashCode(of = "id")
+public class Genre{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

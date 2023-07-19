@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id", callSuper = false)
-public class Drama  extends RepresentationModel<Drama> {
+@EqualsAndHashCode(of = "id")
+public class Drama{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

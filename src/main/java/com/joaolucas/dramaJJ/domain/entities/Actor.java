@@ -14,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id", callSuper = false)
-public class Actor extends RepresentationModel<Actor> {
+@EqualsAndHashCode(of = "id")
+public class Actor{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
