@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -21,13 +19,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll(){
-
-        List<UserDTO> userDTOS = userService.findAll();
-
-
-
-
-        return ResponseEntity.ok(userDTOS);
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/{id}")

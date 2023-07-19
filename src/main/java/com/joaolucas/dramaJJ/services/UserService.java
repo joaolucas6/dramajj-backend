@@ -1,5 +1,8 @@
 package com.joaolucas.dramaJJ.services;
 
+import com.joaolucas.dramaJJ.controllers.ActorController;
+import com.joaolucas.dramaJJ.controllers.DramaController;
+import com.joaolucas.dramaJJ.controllers.UserController;
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
@@ -20,6 +23,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Service
 public class UserService {
 
@@ -39,17 +45,31 @@ public class UserService {
     public List<UserDTO> findAll() {
         List<UserDTO> list = new ArrayList<>();
         userRepository.findAll().forEach(user -> list.add(new UserDTO(user)));
+
+        list.forEach(userDTO -> {
+            userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getId())).withSelfRel());
+        });
+
         return list;
     }
 
     public UserDTO findById(Long id){
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", id)));
-        return new UserDTO(user);
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("User with ID %d was not found", id))
+        );
+
+        UserDTO userDTO = new UserDTO(user);
+
+        userDTO.add(linkTo(methodOn(UserController.class).findById(id)).withSelfRel());
+
+        return userDTO;
     }
 
     public UserDTO update(Long id, UserDTO userDTO){
 
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("User with ID %d was not found", id)));
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("User with ID %d was not found", id))
+        );
 
         if(userDTO.getFirstName() != null) user.setFirstName(userDTO.getFirstName());
         if(userDTO.getLastName() != null) user.setLastName(userDTO.getLastName());
@@ -59,9 +79,11 @@ public class UserService {
         if(userDTO.getGender() != null) user.setGender(userDTO.getGender());
         if(userDTO.getBirthDate() != null) user.setBirthDate(userDTO.getBirthDate());
 
-        userRepository.save(user);
+        UserDTO updatedUserDTO = new UserDTO(userRepository.save(user));
 
-        return new UserDTO(user);
+        updatedUserDTO.add(linkTo(methodOn(UserController.class).findById(id)).withSelfRel());
+
+        return updatedUserDTO;
 
 
     }
@@ -112,6 +134,10 @@ public class UserService {
 
         user.getFavoriteDramas().forEach(favoriteDrama -> list.add(new DramaDTO(favoriteDrama)));
 
+        list.forEach(dramaDTO -> {
+            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
+        });
+
         return list;
     }
 
@@ -127,6 +153,10 @@ public class UserService {
         List<DramaDTO> list = new ArrayList<>();
 
         user.getFavoriteDramas().forEach(favoriteDrama -> list.add(new DramaDTO(favoriteDrama)));
+
+        list.forEach(dramaDTO -> {
+            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
+        });
 
         return list;
     }
@@ -145,6 +175,10 @@ public class UserService {
 
         user.getPlanToWatch().forEach(planToWatchDrama -> list.add(new DramaDTO(planToWatchDrama)));
 
+        list.forEach(dramaDTO -> {
+            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
+        });
+
         return list;
 
     }
@@ -162,6 +196,10 @@ public class UserService {
         List<DramaDTO> list = new ArrayList<>();
 
         user.getPlanToWatch().forEach(planToWatchDrama -> list.add(new DramaDTO(planToWatchDrama)));
+
+        list.forEach(dramaDTO -> {
+            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
+        });
 
         return list;
     }
@@ -182,6 +220,10 @@ public class UserService {
         List<UserDTO> list = new ArrayList<>();
         follower.getFollowing().forEach(user -> list.add(new UserDTO(user)));
 
+        list.forEach(userDTO -> {
+            userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getId())).withSelfRel());
+        });
+
         return list;
 
     }
@@ -200,6 +242,10 @@ public class UserService {
 
         List<ActorDTO> list = new ArrayList<>();
         follower.getFollowingActors().forEach(listActor -> list.add(new ActorDTO(listActor)));
+
+        list.forEach(actorDTO -> {
+            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
+        });
 
         return list;
     }
@@ -221,6 +267,10 @@ public class UserService {
         List<UserDTO> list = new ArrayList<>();
         unfollowing.getFollowing().forEach(user -> list.add(new UserDTO(user)));
 
+        list.forEach(userDTO -> {
+            userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getId())).withSelfRel());
+        });
+
         return list;
 
     }
@@ -239,6 +289,10 @@ public class UserService {
 
         List<ActorDTO> list = new ArrayList<>();
         follower.getFollowingActors().forEach(listActor -> list.add(new ActorDTO(listActor)));
+
+        list.forEach(actorDTO -> {
+            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
+        });
 
         return list;
     }
