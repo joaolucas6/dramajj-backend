@@ -6,5 +6,7 @@ spring:
     url: jdbc:mysql://${DB_URL}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
+  flyway:
+    locations: classpath:db/migration
