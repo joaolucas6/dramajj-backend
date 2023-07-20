@@ -71,6 +71,7 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "followers")
     private List<Actor> followingActors = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override
