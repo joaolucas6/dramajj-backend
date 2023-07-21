@@ -3,6 +3,7 @@ package com.joaolucas.dramaJJ.services;
 import com.joaolucas.dramaJJ.domain.dto.AuthenticationRequest;
 import com.joaolucas.dramaJJ.domain.dto.AuthenticationResponse;
 import com.joaolucas.dramaJJ.domain.dto.RegisterRequest;
+import com.joaolucas.dramaJJ.domain.entities.Role;
 import com.joaolucas.dramaJJ.domain.entities.User;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class AuthenticationService {
                 .lastName(request.lastName())
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
+                .role(Role.valueOf(request.role()))
                 .build();
         var token = jwtService.generateKey(userRepository.save(user));
         return new AuthenticationResponse(token);

@@ -1,8 +1,10 @@
 package com.joaolucas.dramaJJ.config;
 
+import com.joaolucas.dramaJJ.domain.entities.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,8 +33,31 @@ public class SecurityConfiguration {
                     authorize
                             .requestMatchers("/api/v1/auth/**")
                             .permitAll()
+                            .requestMatchers(
+                                    HttpMethod.GET,
+                                    "/api/v1/users/**",
+                                    "/api/v1/actors/**",
+                                    "/api/v1/dramas/**",
+                                    "/api/v1/genres/**",
+                                    "/api/v1/reviews/**"
+                            )
+                            .authenticated()
+                            .requestMatchers(HttpMethod.POST,
+                                    "/api/v1/reviews/**"
+                            )
+                            .authenticated()
+                            .requestMatchers(HttpMethod.PUT,
+                                    "/api/v1/reviews/**",
+                                    "/api/v1/users/**"
+                            )
+                            .authenticated()
+                            .requestMatchers(HttpMethod.DELETE,
+                                    "/api/v1/users/**", "/api/v1/reviews/**"
+                            )
+                            .authenticated()
                             .anyRequest()
-                            .authenticated();
+                            .hasRole(Role.ADMIN.name());
+
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
