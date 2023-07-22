@@ -32,7 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
 
         String token = authHead.substring(7);
-        String username = jwtService.extractUsername(token);
+        String username = jwtService.extractUsernameAndValidate(token);
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = costumizedUserDetailsService.loadUserByUsername(username);
