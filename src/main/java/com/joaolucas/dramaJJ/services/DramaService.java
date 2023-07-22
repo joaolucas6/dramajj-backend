@@ -17,6 +17,7 @@ import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.repositories.ReviewRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,36 +28,33 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
+@RequiredArgsConstructor
 public class DramaService {
-
-    @Autowired
-    private DramaRepository dramaRepository;
-
-    @Autowired
-    private ActorRepository actorRepository;
-
-    @Autowired
-    private GenreRepository genreRepository;
-
-    @Autowired
-    private ReviewService reviewService;
+    private final DramaRepository dramaRepository;
+    private final ActorRepository actorRepository;
+    private final GenreRepository genreRepository;
+    private final ReviewService reviewService;
 
     public List<DramaDTO> findAll(){
 
-        List<DramaDTO> list = new ArrayList<>();
+        List<DramaDTO> allDramasDTO = new ArrayList<>();
 
-        dramaRepository.findAll().forEach(drama -> list.add(new DramaDTO(drama)));
+        dramaRepository.findAll().forEach(drama -> allDramasDTO.add(new DramaDTO(drama)));
 
-        list.forEach(dramaDTO -> {
+        allDramasDTO.forEach(dramaDTO -> {
             dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
         });
 
-        return list;
+        return allDramasDTO;
     }
 
     public DramaDTO findById(Long id){
 
-        DramaDTO dramaDTO = new DramaDTO(dramaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id))));
+        DramaDTO dramaDTO = new DramaDTO(
+                dramaRepository.findById(id).orElseThrow(
+                        () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id))
+                )
+        );
 
         dramaDTO.add(linkTo(methodOn(DramaController.class).findById(id)).withSelfRel());
 
@@ -65,7 +63,9 @@ public class DramaService {
 
     public DramaDTO create(DramaDTO dramaDTO){
 
-        Drama drama = DTOMapper.toDrama(dramaDTO, null, List.of(),  List.of(), List.of());
+        Drama drama = DTOMapper.toDrama(
+                dramaDTO, null, List.of(),  List.of(), List.of()
+        );
 
         dramaRepository.save(drama);
 
@@ -77,7 +77,9 @@ public class DramaService {
     }
 
     public DramaDTO update(Long dramaId, DramaDTO dramaDTO){
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
+        );
 
         if(dramaDTO.getName() != null) drama.setName(dramaDTO.getName());
         if(dramaDTO.getSynopsis() != null) drama.setSynopsis(dramaDTO.getSynopsis());
@@ -94,7 +96,9 @@ public class DramaService {
     }
 
     public void delete(Long id){
-        Drama drama = dramaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id)));
+        Drama drama = dramaRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id))
+        );
 
         List<Actor> casting = drama.getCasting();
         List<Review> reviews = drama.getReviews();
@@ -117,10 +121,14 @@ public class DramaService {
         dramaRepository.delete(drama);
     }
 
-    public List<ActorDTO> addActor(Long actorId, Long dramaId) throws Exception {
+    public List<ActorDTO> addActor(Long actorId, Long dramaId){
 
-        Actor actor = actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId)));
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
+        Actor actor = actorRepository.findById(actorId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId))
+        );
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
+        );
 
         if(actor.getDramas().contains(drama) || drama.getCasting().contains(actor)) throw new ConflictException("Actor already in casting");
 
@@ -142,10 +150,14 @@ public class DramaService {
 
     }
 
-    public List<ActorDTO> removeActor(Long actorId, Long dramaId) throws Exception {
+    public List<ActorDTO> removeActor(Long actorId, Long dramaId) {
 
-        Actor actor = actorRepository.findById(actorId).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId)));
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
+        Actor actor = actorRepository.findById(actorId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId))
+        );
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
+        );
 
         if(!actor.getDramas().contains(drama) || !drama.getCasting().contains(actor)) throw new ConflictException("Actor is was not found in casting");
 
@@ -157,7 +169,9 @@ public class DramaService {
 
         List<ActorDTO> list = new ArrayList<>();
 
-        drama.getCasting().forEach(castingActor -> list.add(new ActorDTO(castingActor)));
+        drama.getCasting().forEach(
+                castingActor -> list.add(new ActorDTO(castingActor))
+        );
 
         list.forEach(actorDTO -> {
             actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
@@ -168,8 +182,13 @@ public class DramaService {
     }
 
     public List<GenreDTO> addGenre(Long genreId, Long dramaId) throws Exception {
-        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId)));
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
+        Genre genre = genreRepository.findById(genreId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId))
+        );
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
+        );
+
         if(genre.getDramas().contains(drama) || drama.getGenres().contains(genre)) throw new ConflictException("Genre is already in drama");
         genre.getDramas().add(drama);
         drama.getGenres().add(genre);
@@ -190,8 +209,12 @@ public class DramaService {
     }
 
     public List<GenreDTO> removeGenre(Long genreId, Long dramaId) throws Exception {
-        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId)));
-        Drama drama = dramaRepository.findById(dramaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId)));
+        Genre genre = genreRepository.findById(genreId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId))
+        );
+        Drama drama = dramaRepository.findById(dramaId).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
+        );
         if(!genre.getDramas().contains(drama) || !drama.getGenres().contains(genre)) throw new ConflictException("Genre was not found in drama");
         genre.getDramas().remove(drama);
         drama.getGenres().remove(genre);
