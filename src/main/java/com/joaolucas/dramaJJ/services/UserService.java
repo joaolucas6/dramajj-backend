@@ -5,7 +5,6 @@ import com.joaolucas.dramaJJ.controllers.DramaController;
 import com.joaolucas.dramaJJ.controllers.UserController;
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
-import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
@@ -18,7 +17,6 @@ import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.ReviewRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

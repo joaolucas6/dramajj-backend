@@ -1,10 +1,8 @@
 package com.joaolucas.dramaJJ.controllers;
 
 import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
-import com.joaolucas.dramaJJ.domain.entities.Review;
 import com.joaolucas.dramaJJ.services.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
