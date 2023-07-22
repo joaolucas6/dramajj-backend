@@ -8,6 +8,7 @@ import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,29 +19,27 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
+@RequiredArgsConstructor
 public class GenreService {
-
-    @Autowired
-    private GenreRepository genreRepository;
-
-    @Autowired
-    private DramaRepository dramaRepository;
+    private final GenreRepository genreRepository;
+    private final DramaRepository dramaRepository;
 
     public List<GenreDTO> findAll(){
-        List<GenreDTO> list = new ArrayList<>();
+        List<GenreDTO> allGenresDTO = new ArrayList<>();
 
-        genreRepository.findAll().forEach(genre -> list.add(new GenreDTO(genre)));
+        genreRepository.findAll().forEach(genre -> allGenresDTO.add(new GenreDTO(genre)));
 
-        list.forEach(genreDTO -> {
+        allGenresDTO.forEach(genreDTO -> {
             genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
         });
 
-        return list;
+        return allGenresDTO;
     }
 
     public GenreDTO findById(Long id){
-
-        GenreDTO genreDTO = new GenreDTO(genreRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id))));
+        GenreDTO genreDTO = new GenreDTO(genreRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id)))
+        );
 
         genreDTO.add(linkTo(methodOn(GenreController.class).findById(id)).withSelfRel());
 
@@ -50,15 +49,18 @@ public class GenreService {
     public GenreDTO create(GenreDTO genreDTO){
         Genre genre = DTOMapper.toGenre(genreDTO, List.of());
 
-        GenreDTO responseGenreDTO =  new GenreDTO(genreRepository.save(genre));
+        genreDTO = new GenreDTO(genreRepository.save(genre));
 
-        responseGenreDTO.add(linkTo(methodOn(GenreController.class).findById(responseGenreDTO.getId())).withSelfRel());
+        genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
 
-        return responseGenreDTO;
+        return genreDTO;
     }
 
     public GenreDTO update(Long id, GenreDTO genreDTO){
-        Genre genre = genreRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id)));
+        Genre genre = genreRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id))
+        );
+
         if(genreDTO.getName() != null) genre.setName(genreDTO.getName());
 
         GenreDTO updatedGenreDTO = new GenreDTO(genreRepository.save(genre));
@@ -70,7 +72,9 @@ public class GenreService {
     }
 
     public void delete(Long id){
-        Genre genre = genreRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id)));
+        Genre genre = genreRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id))
+        );
 
         List<Drama> dramas = genre.getDramas();
 
