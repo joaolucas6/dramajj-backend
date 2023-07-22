@@ -6,6 +6,7 @@ import com.joaolucas.dramaJJ.domain.dto.RegisterRequest;
 import com.joaolucas.dramaJJ.domain.entities.Role;
 import com.joaolucas.dramaJJ.domain.entities.User;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,22 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService {
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JWTService jwtService;
-
-    @Autowired
-    private CostumizedUserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final JWTService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request){
         User user = User
