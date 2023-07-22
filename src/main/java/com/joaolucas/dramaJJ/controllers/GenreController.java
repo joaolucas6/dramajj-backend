@@ -16,9 +16,8 @@ import java.util.List;
 @RequestMapping("/api/v1/genres")
 @RequiredArgsConstructor
 public class GenreController {
-    @Autowired
-    private GenreService genreService;
 
+    private final GenreService genreService;
 
     @GetMapping
     public ResponseEntity<List<GenreDTO>> findAll(){
