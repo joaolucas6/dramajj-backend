@@ -2,6 +2,7 @@ package com.joaolucas.dramaJJ.controllers;
 
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.services.ActorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/actors")
+@RequiredArgsConstructor
 public class ActorController {
 
-    @Autowired
-    private ActorService actorService;
-
+    private final ActorService actorService;
 
     @GetMapping
     public ResponseEntity<List<ActorDTO>> findAll(){
