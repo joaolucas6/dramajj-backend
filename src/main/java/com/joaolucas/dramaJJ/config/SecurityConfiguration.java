@@ -18,12 +18,8 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
-
-    @Autowired
-    private SecurityFilter securityFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
