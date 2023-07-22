@@ -10,6 +10,7 @@ import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,30 +21,27 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
+@RequiredArgsConstructor
 public class ActorService {
-
-    @Autowired
-    private ActorRepository actorRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private DramaRepository dramaRepository;
+    private final ActorRepository actorRepository;
+    private final UserRepository userRepository;
+    private final DramaRepository dramaRepository;
 
     public List<ActorDTO> findAll(){
-        List<ActorDTO> list = new ArrayList<>();
-        actorRepository.findAll().forEach(actor -> list.add(new ActorDTO(actor)));
+        List<ActorDTO> allActorsDTO = new ArrayList<>();
+        actorRepository.findAll().forEach(actor -> allActorsDTO.add(new ActorDTO(actor)));
 
-        list.forEach(actorDTO -> {
+        allActorsDTO.forEach(actorDTO -> {
             actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
         });
 
-        return list;
+        return allActorsDTO;
     }
 
     public ActorDTO findById(Long id){
-        ActorDTO actorDTO = new ActorDTO(actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))));
+        ActorDTO actorDTO = new ActorDTO(actorRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id)))
+        );
 
         actorDTO.add(linkTo(methodOn(ActorController.class).findById(id)).withSelfRel());
 
@@ -60,7 +58,10 @@ public class ActorService {
     }
 
     public ActorDTO update(Long id, ActorDTO actorDTO){
-        Actor actor = actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id)));
+        Actor actor = actorRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))
+        );
+
         if(actorDTO.getFirstName() != null) actor.setFirstName(actorDTO.getFirstName());
         if(actorDTO.getLastName() != null) actor.setLastName(actorDTO.getLastName());
         if(actorDTO.getSurname() != null) actor.setSurname(actorDTO.getSurname());
@@ -78,7 +79,9 @@ public class ActorService {
     }
 
     public void delete(Long id){
-        Actor actor = actorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id)));
+        Actor actor = actorRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))
+        );
 
         List<User> followers = actor.getFollowers();
         List<Drama> dramas = actor.getDramas();
