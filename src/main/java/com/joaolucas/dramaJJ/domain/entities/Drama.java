@@ -2,9 +2,6 @@ package com.joaolucas.dramaJJ.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CollectionType;
-import org.springframework.hateoas.RepresentationModel;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
