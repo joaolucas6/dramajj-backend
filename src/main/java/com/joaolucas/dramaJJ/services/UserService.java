@@ -90,6 +90,8 @@ public class UserService {
                 )
         );
 
+        if(user.getPlanToWatch().contains(drama)) throw new ConflictException("The drama has already been added to the Plan to Watch list");
+
         if(user.getFavoriteDramas().contains(drama)) throw new ConflictException(
                 "Drama is already in Favorite Dramas list"
         );
@@ -122,6 +124,7 @@ public class UserService {
                 () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
         );
 
+        if(user.getFavoriteDramas().contains(drama)) throw new ConflictException("The drama has already been added to the Favorite Dramas list");
         if(user.getPlanToWatch().contains(drama)) throw new ConflictException("Drama is already in Plan to Watch list");
 
         user.getPlanToWatch().add(drama);
