@@ -2,16 +2,13 @@ package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.GenreController;
 import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
-import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Genre;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
-import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -20,19 +17,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 @RequiredArgsConstructor
 public class GenreService {
+    
     private final GenreRepository genreRepository;
-    private final DramaRepository dramaRepository;
 
     public List<GenreDTO> findAll(){
-        List<GenreDTO> allGenresDTO = new ArrayList<>();
-
-        genreRepository.findAll().forEach(genre -> allGenresDTO.add(new GenreDTO(genre)));
-
-        allGenresDTO.forEach(genreDTO -> {
-            genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
-        });
-
-        return allGenresDTO;
+        return genreRepository.findAll().stream().map(genre -> new GenreDTO(genre).add(linkTo(methodOn(GenreController.class).findById(genre.getId())).withSelfRel())).toList();
     }
 
     public GenreDTO findById(Long id){
@@ -74,14 +63,6 @@ public class GenreService {
         Genre genre = genreRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id))
         );
-
-        List<Drama> dramas = genre.getDramas();
-
-        dramas.forEach(drama -> {
-            drama.getGenres().remove(genre);
-            dramaRepository.save(drama);
-        });
-
         genreRepository.delete(genre);
     }
 
