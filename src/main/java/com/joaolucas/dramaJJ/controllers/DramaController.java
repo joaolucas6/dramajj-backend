@@ -1,8 +1,6 @@
 package com.joaolucas.dramaJJ.controllers;
 
-import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
-import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
 import com.joaolucas.dramaJJ.services.DramaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,28 +36,32 @@ public class DramaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         dramaService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/casting/{actorId}/{dramaId}")
-    public ResponseEntity<List<ActorDTO>> addActor(@PathVariable Long actorId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(dramaService.addActor(actorId, dramaId));
+    public ResponseEntity<Void> addActor(@PathVariable Long actorId, @PathVariable Long dramaId) throws Exception {
+        dramaService.addActor(actorId, dramaId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/casting/{actorId}/{dramaId}")
-    public ResponseEntity<List<ActorDTO>> removeActor(@PathVariable Long actorId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(dramaService.removeActor(actorId, dramaId));
+    public ResponseEntity<Void> removeActor(@PathVariable Long actorId, @PathVariable Long dramaId) throws Exception {
+        dramaService.removeActor(actorId, dramaId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/genres/{genreId}/{dramaId}")
-    public ResponseEntity<List<GenreDTO>> addGenre(@PathVariable Long genreId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(dramaService.addGenre(genreId, dramaId));
+    public ResponseEntity<Void> addGenre(@PathVariable Long genreId, @PathVariable Long dramaId) throws Exception {
+        dramaService.addGenre(genreId, dramaId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/genres/{genreId}/{dramaId}")
-    public ResponseEntity<List<GenreDTO>> removeGenre(@PathVariable Long genreId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(dramaService.removeGenre(genreId, dramaId));
+    public ResponseEntity<Void> removeGenre(@PathVariable Long genreId, @PathVariable Long dramaId) throws Exception {
+        dramaService.removeGenre(genreId, dramaId);
+        return ResponseEntity.ok().build();
     }
 }

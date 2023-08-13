@@ -17,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 @RequiredArgsConstructor
 public class GenreService {
-    
+
     private final GenreRepository genreRepository;
 
     public List<GenreDTO> findAll(){

@@ -54,7 +54,7 @@ public class DTOMapper {
     }
 
 
-    public static Drama toDrama(DramaDTO dramaDTO, Genre genre, List<Actor> casting, List<Review> reviews, List<Genre> genres){
+    public static Drama toDrama(DramaDTO dramaDTO, List<Genre> genres, List<Actor> casting, List<Review> reviews){
         return Drama
                 .builder()
                 .id(dramaDTO.getId())

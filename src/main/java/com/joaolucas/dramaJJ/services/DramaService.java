@@ -1,15 +1,10 @@
 package com.joaolucas.dramaJJ.services;
 
-import com.joaolucas.dramaJJ.controllers.ActorController;
 import com.joaolucas.dramaJJ.controllers.DramaController;
-import com.joaolucas.dramaJJ.controllers.GenreController;
-import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
-import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
 import com.joaolucas.dramaJJ.domain.entities.Genre;
-import com.joaolucas.dramaJJ.domain.entities.Review;
 import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
@@ -19,7 +14,6 @@ import com.joaolucas.dramaJJ.utils.DTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -28,22 +22,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 @RequiredArgsConstructor
 public class DramaService {
+
     private final DramaRepository dramaRepository;
     private final ActorRepository actorRepository;
     private final GenreRepository genreRepository;
-    private final ReviewService reviewService;
 
     public List<DramaDTO> findAll(){
-
-        List<DramaDTO> allDramasDTO = new ArrayList<>();
-
-        dramaRepository.findAll().forEach(drama -> allDramasDTO.add(new DramaDTO(drama)));
-
-        allDramasDTO.forEach(dramaDTO -> {
-            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
-        });
-
-        return allDramasDTO;
+        return dramaRepository.findAll().stream().map(drama -> new DramaDTO(drama).add(linkTo(methodOn(DramaController.class).findById(drama.getId())).withSelfRel())).toList();
     }
 
     public DramaDTO findById(Long id){
@@ -62,16 +47,13 @@ public class DramaService {
     public DramaDTO create(DramaDTO dramaDTO){
 
         Drama drama = DTOMapper.toDrama(
-                dramaDTO, null, List.of(),  List.of(), List.of()
+                dramaDTO, List.of(), List.of(),  List.of()
         );
 
-        dramaRepository.save(drama);
+        Drama savedDrama = dramaRepository.save(drama);
 
-        DramaDTO responseDramaDTO = new DramaDTO(drama);
 
-        responseDramaDTO.add(linkTo(methodOn(DramaController.class).findById(responseDramaDTO.getId())).withSelfRel());
-
-        return responseDramaDTO;
+        return new DramaDTO(savedDrama).add(linkTo(methodOn(DramaController.class).findById(savedDrama.getId())).withSelfRel());
     }
 
     public DramaDTO update(Long dramaId, DramaDTO dramaDTO){
@@ -98,28 +80,10 @@ public class DramaService {
                 () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", id))
         );
 
-        List<Actor> casting = drama.getCasting();
-        List<Review> reviews = drama.getReviews();
-        List<Genre> genres = drama.getGenres();
-
-        casting.forEach(actor -> {
-            actor.getDramas().remove(drama);
-            actorRepository.save(actor);
-        });
-
-        reviews.forEach(review -> {
-            reviewService.delete(review.getId());
-        });
-
-        genres.forEach(genre -> {
-            genre.getDramas().remove(drama);
-            genreRepository.save(genre);
-        });
-
         dramaRepository.delete(drama);
     }
 
-    public List<ActorDTO> addActor(Long actorId, Long dramaId){
+    public void addActor(Long actorId, Long dramaId){
 
         Actor actor = actorRepository.findById(actorId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId))
@@ -136,19 +100,9 @@ public class DramaService {
         actorRepository.save(actor);
         dramaRepository.save(drama);
 
-        List<ActorDTO> list = new ArrayList<>();
-
-        drama.getCasting().forEach(castingActor -> list.add(new ActorDTO(castingActor)));
-
-        list.forEach(actorDTO -> {
-            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
-        });
-
-        return list;
-
     }
 
-    public List<ActorDTO> removeActor(Long actorId, Long dramaId) {
+    public void removeActor(Long actorId, Long dramaId) {
 
         Actor actor = actorRepository.findById(actorId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", actorId))
@@ -164,22 +118,9 @@ public class DramaService {
 
         actorRepository.save(actor);
         dramaRepository.save(drama);
-
-        List<ActorDTO> list = new ArrayList<>();
-
-        drama.getCasting().forEach(
-                castingActor -> list.add(new ActorDTO(castingActor))
-        );
-
-        list.forEach(actorDTO -> {
-            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
-        });
-
-        return list;
-
     }
 
-    public List<GenreDTO> addGenre(Long genreId, Long dramaId) throws Exception {
+    public void addGenre(Long genreId, Long dramaId){
         Genre genre = genreRepository.findById(genreId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId))
         );
@@ -194,19 +135,9 @@ public class DramaService {
         genreRepository.save(genre);
         dramaRepository.save(drama);
 
-        List<GenreDTO> list = new ArrayList<>();
-
-        drama.getGenres().forEach(listGenre -> list.add(new GenreDTO(listGenre)));
-
-        list.forEach(genreDTO -> {
-            genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
-        });
-
-        return list;
-
     }
 
-    public List<GenreDTO> removeGenre(Long genreId, Long dramaId) throws Exception {
+    public void removeGenre(Long genreId, Long dramaId){
         Genre genre = genreRepository.findById(genreId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", genreId))
         );
@@ -219,16 +150,6 @@ public class DramaService {
 
         genreRepository.save(genre);
         dramaRepository.save(drama);
-
-        List<GenreDTO> list = new ArrayList<>();
-
-        drama.getGenres().forEach(listGenre -> list.add(new GenreDTO(listGenre)));
-
-        list.forEach(genreDTO -> {
-            genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
-        });
-
-        return list;
 
     }
 
