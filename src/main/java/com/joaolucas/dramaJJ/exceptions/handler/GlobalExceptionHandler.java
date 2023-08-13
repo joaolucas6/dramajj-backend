@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR.name(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 exception.getMessage(),
-                new Date()
+                LocalDateTime.now()
         );
         return ResponseEntity.status(response.errorCode()).body(response);
     }
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.name(),
                 HttpStatus.NOT_FOUND.value(),
                 exception.getMessage(),
-                new Date()
+                LocalDateTime.now()
         );
 
 
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT.name(),
                 HttpStatus.CONFLICT.value(),
                 exception.getMessage(),
-                new Date()
+                LocalDateTime.now()
         );
 
         return ResponseEntity.status(response.errorCode()).body(response);
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.name(),
                 HttpStatus.BAD_REQUEST.value(),
                 exception.getMessage(),
-                new Date()
+                LocalDateTime.now()
         );
 
         return ResponseEntity.status(response.errorCode()).body(response);
