@@ -90,10 +90,10 @@ public class UserService {
                 )
         );
 
-        if(user.getPlanToWatch().contains(drama)) throw new ConflictException("The drama has already been added to the Plan to Watch list");
+        if(user.getPlanToWatch().contains(drama)) throw new ConflictException("Drama has already been added to the Plan to Watch list");
 
         if(user.getFavoriteDramas().contains(drama)) throw new ConflictException(
-                "Drama is already in Favorite Dramas list"
+                "Drama has already been added to the Favorite Drama list"
         );
 
         user.getFavoriteDramas().add(drama);
@@ -125,7 +125,7 @@ public class UserService {
         );
 
         if(user.getFavoriteDramas().contains(drama)) throw new ConflictException("The drama has already been added to the Favorite Dramas list");
-        if(user.getPlanToWatch().contains(drama)) throw new ConflictException("Drama is already in Plan to Watch list");
+        if(user.getPlanToWatch().contains(drama)) throw new ConflictException("Drama has already been added to the Favorite Drama list");
 
         user.getPlanToWatch().add(drama);
         userRepository.save(user);
