@@ -13,7 +13,6 @@ import com.joaolucas.dramaJJ.utils.DTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -31,16 +30,7 @@ public class ReviewService {
 
 
     public List<ReviewDTO> findAll(){
-        List<ReviewDTO> allReviewsDTO = new ArrayList<>();
-        reviewRepository.findAll().forEach(
-                review -> allReviewsDTO.add(new ReviewDTO(review))
-        );
-
-        allReviewsDTO.forEach(reviewDTO -> {
-            reviewDTO.add(linkTo(methodOn(ReviewController.class).findById(reviewDTO.getId())).withSelfRel());
-        });
-
-        return allReviewsDTO;
+        return reviewRepository.findAll().stream().map(review -> new ReviewDTO(review).add(linkTo(methodOn(ReviewController.class).findById(review.getId())).withSelfRel())).toList();
     }
 
     public ReviewDTO findById(Long id){
@@ -94,17 +84,6 @@ public class ReviewService {
         Review review = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Review with ID %d was not found", id))
         );
-
-        User author = review.getAuthor();
-        Drama drama = review.getDrama();
-
-        author.getReviews().remove(review);
-        drama.getReviews().remove(review);
-
-
-        userRepository.save(author);
-        dramaRepository.save(drama);
-
         reviewRepository.delete(review);
     }
 }
