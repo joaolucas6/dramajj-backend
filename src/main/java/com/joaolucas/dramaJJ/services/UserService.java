@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -97,7 +98,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void removeFavoriteDrama(Long userId, Long dramaId) throws Exception {
+    public void removeFavoriteDrama(Long userId, Long dramaId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId))
         );
@@ -111,7 +112,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void addPlanToWatch(Long userId, Long dramaId) throws Exception {
+    public void addPlanToWatch(Long userId, Long dramaId) {
 
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId))
@@ -121,13 +122,13 @@ public class UserService {
                 () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
         );
 
-        if(user.getPlanToWatch().contains(drama)) throw new Exception("Drama is already in Plan to Watch list");
+        if(user.getPlanToWatch().contains(drama)) throw new ConflictException("Drama is already in Plan to Watch list");
 
         user.getPlanToWatch().add(drama);
         userRepository.save(user);
     }
 
-    public void removePlanToWatch(Long userId, Long dramaId) throws Exception {
+    public void removePlanToWatch(Long userId, Long dramaId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId))
         );
@@ -137,13 +138,15 @@ public class UserService {
         );
 
 
-        if(!user.getPlanToWatch().contains(drama)) throw new Exception("Drama was not found in Favorite Dramas list");
+        if(!user.getPlanToWatch().contains(drama)) throw new ConflictException("Drama was not found in Favorite Dramas list");
 
         user.getPlanToWatch().remove(drama);
         userRepository.save(user);
     }
 
-    public void follow(Long followerId, Long followedId) throws Exception {
+    public void follow(Long followerId, Long followedId) {
+
+        if(Objects.equals(followerId, followedId)) throw new ConflictException("Users can not follow or unfollow themselves");
 
         User follower = userRepository.findById(followerId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", followerId))
@@ -180,7 +183,9 @@ public class UserService {
     }
 
 
-    public void unfollow(Long unfollowingId, Long unfollowedId) throws Exception {
+    public void unfollow(Long unfollowingId, Long unfollowedId) {
+
+        if(Objects.equals(unfollowingId, unfollowedId)) throw new ConflictException("Users can not follow or unfollow themselves");
 
         User unfollowing = userRepository.findById(unfollowingId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowingId))
