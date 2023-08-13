@@ -45,7 +45,7 @@ public class Drama{
     )
     private List<Actor> casting = new ArrayList<>();
 
-    @OneToMany(mappedBy = "drama")
+    @OneToMany(mappedBy = "drama", cascade = CascadeType.REMOVE)
     private List<Review> reviews = new ArrayList<>();
 
     @ElementCollection

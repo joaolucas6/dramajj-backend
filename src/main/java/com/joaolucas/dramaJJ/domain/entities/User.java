@@ -53,7 +53,7 @@ public class User implements UserDetails {
     @ElementCollection
     private List<Drama> planToWatch = new ArrayList<>();
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     private List<Review> reviews = new ArrayList<>();
 
     @ManyToMany
