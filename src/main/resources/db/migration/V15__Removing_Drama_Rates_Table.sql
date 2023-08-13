@@ -1,0 +1,1 @@
+DROP TABLE `drama_rates`;

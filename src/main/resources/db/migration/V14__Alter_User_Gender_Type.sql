@@ -1,0 +1,1 @@
+ALTER TABLE `tb_user` MODIFY `gender` ENUM('FEMALE', 'MALE', 'OTHER');
