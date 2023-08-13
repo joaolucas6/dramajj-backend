@@ -6,6 +6,7 @@ import com.joaolucas.dramaJJ.models.entities.Actor;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
+import com.joaolucas.dramaJJ.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,8 @@ public class ActorService {
     }
 
     public ActorDTO create(ActorDTO actorDTO){
+        if(!DataValidation.isActorInfoValid(actorDTO)) throw new RuntimeException();
+
         Actor actor = DTOMapper.toActor(actorDTO, List.of(), List.of());
         ActorDTO responseActorDTO = new ActorDTO(actorRepository.save(actor));
 
@@ -43,6 +46,8 @@ public class ActorService {
     }
 
     public ActorDTO update(Long id, ActorDTO actorDTO){
+        if(!DataValidation.isActorInfoValid(actorDTO)) throw new RuntimeException();
+
         Actor actor = actorRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))
         );

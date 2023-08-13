@@ -10,6 +10,7 @@ import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
+import com.joaolucas.dramaJJ.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,8 @@ public class UserService {
     }
 
     public UserDTO update(Long id, UserDTO userDTO){
+        if(!DataValidation.isUserInfoValid(userDTO)) throw new RuntimeException();
+
         User user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(
                         String.format("User with ID %d was not found", id)

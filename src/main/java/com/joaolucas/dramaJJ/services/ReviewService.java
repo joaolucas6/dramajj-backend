@@ -10,6 +10,7 @@ import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.ReviewRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
+import com.joaolucas.dramaJJ.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,8 @@ public class ReviewService {
     }
 
     public ReviewDTO create(Long authorId, Long dramaId, ReviewDTO reviewDTO){
+        if(!DataValidation.isReviewInfoValid(reviewDTO)) throw new RuntimeException();
+
         User user = userRepository.findById(authorId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", authorId))
         );
@@ -63,6 +66,8 @@ public class ReviewService {
     }
 
     public ReviewDTO update(Long reviewId, ReviewDTO reviewDTO){
+        if(!DataValidation.isReviewInfoValid(reviewDTO)) throw new RuntimeException();
+
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Review with ID %d was not found", reviewId))
         );

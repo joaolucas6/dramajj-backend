@@ -11,6 +11,7 @@ import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
+import com.joaolucas.dramaJJ.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,8 @@ public class DramaService {
 
     public DramaDTO create(DramaDTO dramaDTO){
 
+        if(!DataValidation.isDramaInfoValid(dramaDTO)) throw new RuntimeException();
+
         Drama drama = DTOMapper.toDrama(
                 dramaDTO, List.of(), List.of(),  List.of()
         );
@@ -57,6 +60,8 @@ public class DramaService {
     }
 
     public DramaDTO update(Long dramaId, DramaDTO dramaDTO){
+        if(!DataValidation.isDramaInfoValid(dramaDTO)) throw new RuntimeException();
+
         Drama drama = dramaRepository.findById(dramaId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))
         );

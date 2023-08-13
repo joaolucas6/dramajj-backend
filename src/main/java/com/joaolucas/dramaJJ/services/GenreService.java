@@ -6,6 +6,7 @@ import com.joaolucas.dramaJJ.models.entities.Genre;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
+import com.joaolucas.dramaJJ.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +36,22 @@ public class GenreService {
     }
 
     public GenreDTO create(GenreDTO genreDTO){
+
+        if(!DataValidation.isGenreInfoValid(genreDTO)) throw new RuntimeException();
+
         Genre genre = DTOMapper.toGenre(genreDTO, List.of());
 
-        genreDTO = new GenreDTO(genreRepository.save(genre));
+        GenreDTO savedGenreDTO = new GenreDTO(genreRepository.save(genre));
 
-        genreDTO.add(linkTo(methodOn(GenreController.class).findById(genreDTO.getId())).withSelfRel());
+        savedGenreDTO.add(linkTo(methodOn(GenreController.class).findById(savedGenreDTO.getId())).withSelfRel());
 
-        return genreDTO;
+        return savedGenreDTO;
     }
 
     public GenreDTO update(Long id, GenreDTO genreDTO){
+
+        if(!DataValidation.isGenreInfoValid(genreDTO)) throw new RuntimeException();
+
         Genre genre = genreRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id))
         );

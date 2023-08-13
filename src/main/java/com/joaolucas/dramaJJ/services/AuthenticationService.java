@@ -6,6 +6,7 @@ import com.joaolucas.dramaJJ.models.dto.RegisterRequest;
 import com.joaolucas.dramaJJ.models.entities.Role;
 import com.joaolucas.dramaJJ.models.entities.User;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
+import com.joaolucas.dramaJJ.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request){
+        if(!DataValidation.isRegisterRequestValid(request)) throw new RuntimeException();
+
         User user = User
                 .builder()
                 .firstName(request.firstName())
