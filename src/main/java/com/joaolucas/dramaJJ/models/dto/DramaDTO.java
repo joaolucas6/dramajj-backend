@@ -23,7 +23,6 @@ public class DramaDTO extends RepresentationModel<DramaDTO> {
     private List<Long> genresId = new ArrayList<>();
     private List<Long> castingId = new ArrayList<>();
     private List<Long> reviewsId = new ArrayList<>();
-    private List<Double> rates = new ArrayList<>();
 
     public DramaDTO(){
 
@@ -38,7 +37,6 @@ public class DramaDTO extends RepresentationModel<DramaDTO> {
         setPosterImgUrl(drama.getPosterImgUrl());
         setEpisodeNumber(drama.getEpisodeNumber());
         drama.getGenres().forEach(genre -> genresId.add(genre.getId()));
-        setRates(drama.getRates());
         drama.getCasting().forEach(actor -> castingId.add(actor.getId()));
         drama.getReviews().forEach(review -> reviewsId.add(review.getId()));
 

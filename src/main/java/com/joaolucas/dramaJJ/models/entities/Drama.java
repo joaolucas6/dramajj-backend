@@ -48,7 +48,4 @@ public class Drama{
     @OneToMany(mappedBy = "drama", cascade = CascadeType.REMOVE)
     private List<Review> reviews = new ArrayList<>();
 
-    @ElementCollection
-    private List<Double> rates = new ArrayList<>();
-
 }

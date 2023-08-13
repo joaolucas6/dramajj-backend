@@ -66,7 +66,6 @@ public class DTOMapper {
                 .genres(genres)
                 .casting(casting)
                 .reviews(reviews)
-                .rates(dramaDTO.getRates())
                 .build();
     }
 
