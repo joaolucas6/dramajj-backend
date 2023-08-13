@@ -1,6 +1,6 @@
 package com.joaolucas.dramaJJ.controllers;
 
-import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
+import com.joaolucas.dramaJJ.models.dto.DramaDTO;
 import com.joaolucas.dramaJJ.services.DramaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

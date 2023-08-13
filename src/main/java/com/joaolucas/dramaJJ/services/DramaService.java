@@ -1,10 +1,10 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.DramaController;
-import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
-import com.joaolucas.dramaJJ.domain.entities.Actor;
-import com.joaolucas.dramaJJ.domain.entities.Drama;
-import com.joaolucas.dramaJJ.domain.entities.Genre;
+import com.joaolucas.dramaJJ.models.dto.DramaDTO;
+import com.joaolucas.dramaJJ.models.entities.Actor;
+import com.joaolucas.dramaJJ.models.entities.Drama;
+import com.joaolucas.dramaJJ.models.entities.Genre;
 import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;

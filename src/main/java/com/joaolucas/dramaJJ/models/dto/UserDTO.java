@@ -1,6 +1,6 @@
-package com.joaolucas.dramaJJ.domain.dto;
+package com.joaolucas.dramaJJ.models.dto;
 
-import com.joaolucas.dramaJJ.domain.entities.User;
+import com.joaolucas.dramaJJ.models.entities.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;

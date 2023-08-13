@@ -1,6 +1,6 @@
 package com.joaolucas.dramaJJ.config;
 
-import com.joaolucas.dramaJJ.domain.entities.Role;
+import com.joaolucas.dramaJJ.models.entities.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

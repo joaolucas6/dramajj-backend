@@ -1,7 +1,7 @@
-package com.joaolucas.dramaJJ.domain.dto;
+package com.joaolucas.dramaJJ.models.dto;
 
 
-import com.joaolucas.dramaJJ.domain.entities.Genre;
+import com.joaolucas.dramaJJ.models.entities.Genre;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;

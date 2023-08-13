@@ -1,10 +1,10 @@
 package com.joaolucas.dramaJJ.services;
 
-import com.joaolucas.dramaJJ.domain.dto.AuthenticationRequest;
-import com.joaolucas.dramaJJ.domain.dto.AuthenticationResponse;
-import com.joaolucas.dramaJJ.domain.dto.RegisterRequest;
-import com.joaolucas.dramaJJ.domain.entities.Role;
-import com.joaolucas.dramaJJ.domain.entities.User;
+import com.joaolucas.dramaJJ.models.dto.AuthenticationRequest;
+import com.joaolucas.dramaJJ.models.dto.AuthenticationResponse;
+import com.joaolucas.dramaJJ.models.dto.RegisterRequest;
+import com.joaolucas.dramaJJ.models.entities.Role;
+import com.joaolucas.dramaJJ.models.entities.User;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

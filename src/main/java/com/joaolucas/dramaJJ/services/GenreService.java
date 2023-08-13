@@ -1,8 +1,8 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.GenreController;
-import com.joaolucas.dramaJJ.domain.dto.GenreDTO;
-import com.joaolucas.dramaJJ.domain.entities.Genre;
+import com.joaolucas.dramaJJ.models.dto.GenreDTO;
+import com.joaolucas.dramaJJ.models.entities.Genre;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.GenreRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;

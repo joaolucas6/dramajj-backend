@@ -1,8 +1,8 @@
 package com.joaolucas.dramaJJ.controllers;
 
-import com.joaolucas.dramaJJ.domain.dto.AuthenticationRequest;
-import com.joaolucas.dramaJJ.domain.dto.AuthenticationResponse;
-import com.joaolucas.dramaJJ.domain.dto.RegisterRequest;
+import com.joaolucas.dramaJJ.models.dto.AuthenticationRequest;
+import com.joaolucas.dramaJJ.models.dto.AuthenticationResponse;
+import com.joaolucas.dramaJJ.models.dto.RegisterRequest;
 import com.joaolucas.dramaJJ.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

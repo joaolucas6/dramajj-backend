@@ -1,8 +1,8 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.ActorController;
-import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
-import com.joaolucas.dramaJJ.domain.entities.Actor;
+import com.joaolucas.dramaJJ.models.dto.ActorDTO;
+import com.joaolucas.dramaJJ.models.entities.Actor;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;

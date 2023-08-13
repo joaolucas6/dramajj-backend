@@ -1,7 +1,7 @@
 package com.joaolucas.dramaJJ.utils;
 
-import com.joaolucas.dramaJJ.domain.dto.*;
-import com.joaolucas.dramaJJ.domain.entities.*;
+import com.joaolucas.dramaJJ.models.dto.*;
+import com.joaolucas.dramaJJ.models.entities.*;
 
 import java.util.List;
 

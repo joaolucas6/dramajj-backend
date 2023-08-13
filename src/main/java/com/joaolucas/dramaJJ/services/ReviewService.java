@@ -1,10 +1,10 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.ReviewController;
-import com.joaolucas.dramaJJ.domain.dto.ReviewDTO;
-import com.joaolucas.dramaJJ.domain.entities.Drama;
-import com.joaolucas.dramaJJ.domain.entities.Review;
-import com.joaolucas.dramaJJ.domain.entities.User;
+import com.joaolucas.dramaJJ.models.dto.ReviewDTO;
+import com.joaolucas.dramaJJ.models.entities.Drama;
+import com.joaolucas.dramaJJ.models.entities.Review;
+import com.joaolucas.dramaJJ.models.entities.User;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
 import com.joaolucas.dramaJJ.repositories.ReviewRepository;

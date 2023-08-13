@@ -1,4 +1,4 @@
-package com.joaolucas.dramaJJ.domain.entities;
+package com.joaolucas.dramaJJ.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
