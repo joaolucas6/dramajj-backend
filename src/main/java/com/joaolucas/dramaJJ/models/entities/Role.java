@@ -12,29 +12,17 @@ import java.util.List;
 
 @AllArgsConstructor
 public enum Role {
-    USER(
-            List.of(Permission.USER_READ)
-    ),
-    ADMIN(
-            List.of(
-                    Permission.ADMIN_CREATE,
-                    Permission.ADMIN_READ,
-                    Permission.ADMIN_UPDATE,
-                    Permission.ADMIN_DELETE
-            )
-    );
+    USER("USER"),
+    ADMIN("ADMIN");
 
     @Getter
-    private final List<Permission> permissions;
+    private final String name;
 
     public List<SimpleGrantedAuthority> getAuthorities(){
 
-        List<SimpleGrantedAuthority> list = new ArrayList<>(getPermissions()
-                .stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.name()))
-                .toList());
+        List<SimpleGrantedAuthority> list = new ArrayList<>();
 
-        list.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        list.add(new SimpleGrantedAuthority("ROLE_" + getName()));
 
         return list;
     }
