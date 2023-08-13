@@ -1,5 +1,6 @@
 package com.joaolucas.dramaJJ.models.dto;
 
+import com.joaolucas.dramaJJ.models.entities.Gender;
 import com.joaolucas.dramaJJ.models.entities.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +20,7 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     private String username;
     private String profilePicImgUrl;
     private String bio;
-    private String gender;
+    private Gender gender;
     private LocalDate birthDate;
     private List<Long> favoriteDramasId = new ArrayList<>();
     private List<Long> planToWatchId = new ArrayList<>();

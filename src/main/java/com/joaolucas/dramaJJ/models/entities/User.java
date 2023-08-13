@@ -41,8 +41,8 @@ public class User implements UserDetails {
     @Column(name = "bio")
     private String bio;
 
-    @Column(name = "gender")
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
