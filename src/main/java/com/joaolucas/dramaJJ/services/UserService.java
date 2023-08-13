@@ -1,14 +1,9 @@
 package com.joaolucas.dramaJJ.services;
 
-import com.joaolucas.dramaJJ.controllers.ActorController;
-import com.joaolucas.dramaJJ.controllers.DramaController;
 import com.joaolucas.dramaJJ.controllers.UserController;
-import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
-import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
 import com.joaolucas.dramaJJ.domain.entities.Drama;
-import com.joaolucas.dramaJJ.domain.entities.Review;
 import com.joaolucas.dramaJJ.domain.entities.User;
 import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
@@ -19,7 +14,6 @@ import com.joaolucas.dramaJJ.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -39,15 +33,7 @@ public class UserService {
 
 
     public List<UserDTO> findAll() {
-        List<UserDTO> allUsersDTO = new ArrayList<>();
-
-        userRepository.findAll().forEach(user -> allUsersDTO.add(new UserDTO(user)));
-
-        allUsersDTO.forEach(userDTO -> {
-            userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getId())).withSelfRel());
-        });
-
-        return allUsersDTO;
+        return userRepository.findAll().stream().map(user -> new UserDTO(user).add(linkTo(methodOn(UserController.class).findById(user.getId())).withSelfRel())).toList();
     }
 
     public UserDTO findById(Long id){
@@ -90,32 +76,10 @@ public class UserService {
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", id))
         );
 
-        List<Review> reviews = user.getReviews();
-        List<User> followers = user.getFollowers();
-        List<User> followings = user.getFollowing();
-        List<Actor> followingActor = user.getFollowingActors();
-
-        reviews.forEach(reviewRepository::delete);
-
-        followers.forEach(follower -> {
-            follower.getFollowing().remove(user);
-            userRepository.save(follower);
-        });
-
-        followings.forEach(following -> {
-            following.getFollowers().remove(user);
-            userRepository.save(following);
-        });
-
-        followingActor.forEach(actor -> {
-            actor.getFollowers().remove(user);
-            actorRepository.save(actor);
-        });
-
         userRepository.delete(user);
     }
 
-    public List<DramaDTO> addFavoriteDrama(Long userId, Long dramaId){
+    public void addFavoriteDrama(Long userId, Long dramaId){
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(
                         String.format("User with ID %d was not found", userId)
@@ -134,22 +98,9 @@ public class UserService {
 
         user.getFavoriteDramas().add(drama);
         userRepository.save(user);
-
-        List<DramaDTO> list = new ArrayList<>();
-
-        user.getFavoriteDramas().forEach(favoriteDrama -> list.add(
-                new DramaDTO(favoriteDrama)
-        ));
-
-        list.forEach(dramaDTO -> {
-            dramaDTO.add(linkTo(methodOn(DramaController.class)
-                    .findById(dramaDTO.getId())).withSelfRel());
-        });
-
-        return list;
     }
 
-    public List<DramaDTO> removeFavoriteDrama(Long userId, Long dramaId) throws Exception {
+    public void removeFavoriteDrama(Long userId, Long dramaId) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId))
         );
@@ -161,23 +112,9 @@ public class UserService {
 
         user.getFavoriteDramas().remove(drama);
         userRepository.save(user);
-
-        List<DramaDTO> list = new ArrayList<>();
-
-        user.getFavoriteDramas().forEach(
-                favoriteDrama -> list.add(new DramaDTO(favoriteDrama))
-        );
-
-        list.forEach(dramaDTO -> {
-            dramaDTO
-                    .add(linkTo(methodOn(DramaController.class)
-                    .findById(dramaDTO.getId())).withSelfRel());
-        });
-
-        return list;
     }
 
-    public List<DramaDTO> addPlanToWatch(Long userId, Long dramaId) throws Exception {
+    public void addPlanToWatch(Long userId, Long dramaId) throws Exception {
 
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId))
@@ -191,20 +128,9 @@ public class UserService {
 
         user.getPlanToWatch().add(drama);
         userRepository.save(user);
-
-        List<DramaDTO> list = new ArrayList<>();
-
-        user.getPlanToWatch().forEach(planToWatchDrama -> list.add(new DramaDTO(planToWatchDrama)));
-
-        list.forEach(dramaDTO -> {
-            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
-        });
-
-        return list;
-
     }
 
-    public List<DramaDTO> removePlanToWatch(Long userId, Long dramaId) throws Exception {
+    public void removePlanToWatch(Long userId, Long dramaId) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", userId))
         );
@@ -218,21 +144,9 @@ public class UserService {
 
         user.getPlanToWatch().remove(drama);
         userRepository.save(user);
-
-        List<DramaDTO> list = new ArrayList<>();
-
-        user.getPlanToWatch().forEach(
-                planToWatchDrama -> list.add(new DramaDTO(planToWatchDrama))
-        );
-
-        list.forEach(dramaDTO -> {
-            dramaDTO.add(linkTo(methodOn(DramaController.class).findById(dramaDTO.getId())).withSelfRel());
-        });
-
-        return list;
     }
 
-    public List<UserDTO> follow(Long followerId, Long followedId) throws Exception {
+    public void follow(Long followerId, Long followedId) throws Exception {
 
         User follower = userRepository.findById(followerId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", followerId))
@@ -249,19 +163,9 @@ public class UserService {
 
         userRepository.save(follower);
         userRepository.save(followed);
-
-        List<UserDTO> list = new ArrayList<>();
-        follower.getFollowing().forEach(user -> list.add(new UserDTO(user)));
-
-        list.forEach(userDTO -> {
-            userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getId())).withSelfRel());
-        });
-
-        return list;
-
     }
 
-    public List<ActorDTO> followActor(Long followerId, Long actorId){
+    public void followActor(Long followerId, Long actorId){
         User follower = userRepository.findById(followerId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", followerId))
         );
@@ -276,21 +180,10 @@ public class UserService {
 
         userRepository.save(follower);
         actorRepository.save(actor);
-
-        List<ActorDTO> list = new ArrayList<>();
-        follower.getFollowingActors().forEach(
-                listActor -> list.add(new ActorDTO(listActor))
-        );
-
-        list.forEach(actorDTO -> {
-            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
-        });
-
-        return list;
     }
 
 
-    public List<UserDTO> unfollow(Long unfollowingId, Long unfollowedId) throws Exception {
+    public void unfollow(Long unfollowingId, Long unfollowedId) throws Exception {
 
         User unfollowing = userRepository.findById(unfollowingId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowingId))
@@ -306,19 +199,9 @@ public class UserService {
 
         userRepository.save(unfollowing);
         userRepository.save(unfollowed);
-
-        List<UserDTO> list = new ArrayList<>();
-        unfollowing.getFollowing().forEach(user -> list.add(new UserDTO(user)));
-
-        list.forEach(userDTO -> {
-            userDTO.add(linkTo(methodOn(UserController.class).findById(userDTO.getId())).withSelfRel());
-        });
-
-        return list;
-
     }
 
-    public List<ActorDTO> unfollowActor(Long unfollowingId, Long actorId){
+    public void unfollowActor(Long unfollowingId, Long actorId){
         User follower = userRepository.findById(unfollowingId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", unfollowingId))
         );
@@ -333,17 +216,6 @@ public class UserService {
 
         userRepository.save(follower);
         actorRepository.save(actor);
-
-        List<ActorDTO> list = new ArrayList<>();
-        follower.getFollowingActors().forEach(
-                listActor -> list.add(new ActorDTO(listActor))
-        );
-
-        list.forEach(actorDTO -> {
-            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
-        });
-
-        return list;
     }
 
 

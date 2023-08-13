@@ -1,7 +1,5 @@
 package com.joaolucas.dramaJJ.controllers;
 
-import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
-import com.joaolucas.dramaJJ.domain.dto.DramaDTO;
 import com.joaolucas.dramaJJ.domain.dto.UserDTO;
 import com.joaolucas.dramaJJ.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,49 +31,57 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/favorite-dramas/{userId}/{dramaId}")
-    public ResponseEntity<List<DramaDTO>> addFavoriteDrama(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(userService.addFavoriteDrama(userId, dramaId));
+    public ResponseEntity<Void> addFavoriteDrama(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
+        userService.addFavoriteDrama(userId, dramaId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/favorite-dramas/{userId}/{dramaId}")
-    public ResponseEntity<List<DramaDTO>> removeFavoriteDrama(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(userService.removeFavoriteDrama(userId, dramaId));
+    public ResponseEntity<Void> removeFavoriteDrama(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
+        userService.removeFavoriteDrama(userId, dramaId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/plan-to-watch/{userId}/{dramaId}")
-    public ResponseEntity<List<DramaDTO>> addPlanToWatch(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(userService.addPlanToWatch(userId, dramaId));
+    public ResponseEntity<Void> addPlanToWatch(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
+        userService.addPlanToWatch(userId, dramaId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/plan-to-watch/{userId}/{dramaId}")
-    public ResponseEntity<List<DramaDTO>> removePlanToWatch(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
-        return ResponseEntity.ok(userService.removePlanToWatch(userId, dramaId));
+    public ResponseEntity<Void> removePlanToWatch(@PathVariable Long userId, @PathVariable Long dramaId) throws Exception {
+        userService.removePlanToWatch(userId, dramaId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/follow/{followerId}/{followedId}")
-    public ResponseEntity<List<UserDTO>> follow(@PathVariable Long followerId, @PathVariable Long followedId) throws Exception {
-        return ResponseEntity.ok(userService.follow(followerId, followedId));
+    public ResponseEntity<Void> follow(@PathVariable Long followerId, @PathVariable Long followedId) throws Exception {
+        userService.follow(followerId, followedId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/unfollow/{unfollowingId}/{unfollowedId}")
-    public ResponseEntity<List<UserDTO>> unfollow(@PathVariable Long unfollowingId, @PathVariable Long unfollowedId) throws Exception {
-        return ResponseEntity.ok(userService.unfollow(unfollowingId, unfollowedId));
+    public ResponseEntity<Void> unfollow(@PathVariable Long unfollowingId, @PathVariable Long unfollowedId) throws Exception {
+        userService.unfollow(unfollowingId, unfollowedId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/follow-actor/{followerId}/{actorId}")
-    public ResponseEntity<List<ActorDTO>> followActor(@PathVariable Long followerId, @PathVariable Long actorId){
-        return ResponseEntity.ok(userService.followActor(followerId, actorId));
+    public ResponseEntity<Void> followActor(@PathVariable Long followerId, @PathVariable Long actorId){
+        userService.followActor(followerId, actorId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/unfollow-actor/{unfollowingId}/{actorId}")
-    public ResponseEntity<List<ActorDTO>> unfollowActor(@PathVariable Long unfollowingId, @PathVariable Long actorId){
-        return ResponseEntity.ok(userService.unfollowActor(unfollowingId, actorId));
+    public ResponseEntity<Void> unfollowActor(@PathVariable Long unfollowingId, @PathVariable Long actorId){
+        userService.unfollowActor(unfollowingId, actorId);
+        return ResponseEntity.ok().build();
     }
 
 }
