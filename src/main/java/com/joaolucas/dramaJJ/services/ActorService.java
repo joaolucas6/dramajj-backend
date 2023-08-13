@@ -1,6 +1,7 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.ActorController;
+import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.models.dto.ActorDTO;
 import com.joaolucas.dramaJJ.models.entities.Actor;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
@@ -35,7 +36,7 @@ public class ActorService {
     }
 
     public ActorDTO create(ActorDTO actorDTO){
-        if(!DataValidation.isActorInfoValid(actorDTO)) throw new RuntimeException();
+        if(!DataValidation.isActorInfoValid(actorDTO)) throw new BadRequestException("Invalid actor info");
 
         Actor actor = DTOMapper.toActor(actorDTO, List.of(), List.of());
         ActorDTO responseActorDTO = new ActorDTO(actorRepository.save(actor));
@@ -46,7 +47,7 @@ public class ActorService {
     }
 
     public ActorDTO update(Long id, ActorDTO actorDTO){
-        if(!DataValidation.isActorInfoValid(actorDTO)) throw new RuntimeException();
+        if(!DataValidation.isActorInfoValid(actorDTO)) throw new BadRequestException("Invalid actor info");
 
         Actor actor = actorRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))

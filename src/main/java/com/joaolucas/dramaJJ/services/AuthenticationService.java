@@ -1,5 +1,6 @@
 package com.joaolucas.dramaJJ.services;
 
+import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.models.dto.AuthenticationRequest;
 import com.joaolucas.dramaJJ.models.dto.AuthenticationResponse;
 import com.joaolucas.dramaJJ.models.dto.RegisterRequest;
@@ -23,7 +24,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request){
-        if(!DataValidation.isRegisterRequestValid(request)) throw new RuntimeException();
+        if(!DataValidation.isRegisterRequestValid(request)) throw new BadRequestException("Invalid register info");
 
         User user = User
                 .builder()

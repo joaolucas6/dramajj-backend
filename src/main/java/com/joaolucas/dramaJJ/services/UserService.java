@@ -1,6 +1,7 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.UserController;
+import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.models.dto.UserDTO;
 import com.joaolucas.dramaJJ.models.entities.Actor;
 import com.joaolucas.dramaJJ.models.entities.Drama;
@@ -48,7 +49,7 @@ public class UserService {
     }
 
     public UserDTO update(Long id, UserDTO userDTO){
-        if(!DataValidation.isUserInfoValid(userDTO)) throw new RuntimeException();
+        if(!DataValidation.isUserInfoValid(userDTO)) throw new BadRequestException("Invalid user info");
 
         User user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(

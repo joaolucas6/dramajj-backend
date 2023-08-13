@@ -1,6 +1,7 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.GenreController;
+import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.models.dto.GenreDTO;
 import com.joaolucas.dramaJJ.models.entities.Genre;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
@@ -37,7 +38,7 @@ public class GenreService {
 
     public GenreDTO create(GenreDTO genreDTO){
 
-        if(!DataValidation.isGenreInfoValid(genreDTO)) throw new RuntimeException();
+        if(!DataValidation.isGenreInfoValid(genreDTO)) throw new BadRequestException("Invalid genre info");
 
         Genre genre = DTOMapper.toGenre(genreDTO, List.of());
 
@@ -50,7 +51,7 @@ public class GenreService {
 
     public GenreDTO update(Long id, GenreDTO genreDTO){
 
-        if(!DataValidation.isGenreInfoValid(genreDTO)) throw new RuntimeException();
+        if(!DataValidation.isGenreInfoValid(genreDTO)) throw new BadRequestException("Invalid genre info");
 
         Genre genre = genreRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Genre with ID %d was not found", id))

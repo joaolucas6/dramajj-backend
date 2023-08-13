@@ -1,6 +1,7 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.DramaController;
+import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.models.dto.DramaDTO;
 import com.joaolucas.dramaJJ.models.entities.Actor;
 import com.joaolucas.dramaJJ.models.entities.Drama;
@@ -47,7 +48,7 @@ public class DramaService {
 
     public DramaDTO create(DramaDTO dramaDTO){
 
-        if(!DataValidation.isDramaInfoValid(dramaDTO)) throw new RuntimeException();
+        if(!DataValidation.isDramaInfoValid(dramaDTO)) throw new BadRequestException("Invalid drama info");
 
         Drama drama = DTOMapper.toDrama(
                 dramaDTO, List.of(), List.of(),  List.of()
@@ -60,7 +61,7 @@ public class DramaService {
     }
 
     public DramaDTO update(Long dramaId, DramaDTO dramaDTO){
-        if(!DataValidation.isDramaInfoValid(dramaDTO)) throw new RuntimeException();
+        if(!DataValidation.isDramaInfoValid(dramaDTO)) throw new BadRequestException("Invalid drama info");
 
         Drama drama = dramaRepository.findById(dramaId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Drama with ID %d was not found", dramaId))

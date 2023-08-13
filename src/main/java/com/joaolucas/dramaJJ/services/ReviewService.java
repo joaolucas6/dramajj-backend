@@ -1,6 +1,7 @@
 package com.joaolucas.dramaJJ.services;
 
 import com.joaolucas.dramaJJ.controllers.ReviewController;
+import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.models.dto.ReviewDTO;
 import com.joaolucas.dramaJJ.models.entities.Drama;
 import com.joaolucas.dramaJJ.models.entities.Review;
@@ -45,7 +46,7 @@ public class ReviewService {
     }
 
     public ReviewDTO create(Long authorId, Long dramaId, ReviewDTO reviewDTO){
-        if(!DataValidation.isReviewInfoValid(reviewDTO)) throw new RuntimeException();
+        if(!DataValidation.isReviewInfoValid(reviewDTO)) throw new BadRequestException("Invalid review info");
 
         User user = userRepository.findById(authorId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("User with ID %d was not found", authorId))
@@ -66,7 +67,7 @@ public class ReviewService {
     }
 
     public ReviewDTO update(Long reviewId, ReviewDTO reviewDTO){
-        if(!DataValidation.isReviewInfoValid(reviewDTO)) throw new RuntimeException();
+        if(!DataValidation.isReviewInfoValid(reviewDTO)) throw new BadRequestException("Invalid review info");
 
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format("Review with ID %d was not found", reviewId))
