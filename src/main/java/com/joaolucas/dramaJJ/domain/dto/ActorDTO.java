@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = false)
@@ -18,7 +18,7 @@ public class ActorDTO extends RepresentationModel<ActorDTO> {
     private String lastName;
     private String surname;
     private String gender;
-    private Date birthDate;
+    private LocalDate birthDate;
     private String pictureUrl;
     private String nationality;
     private String bio;

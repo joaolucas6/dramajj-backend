@@ -3,7 +3,7 @@ package com.joaolucas.dramaJJ.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_review")
@@ -36,7 +36,7 @@ public class Review{
     private Double rating;
 
     @Column(name = "instant")
-    private Date instant;
+    private LocalDateTime instant;
 
 
 }

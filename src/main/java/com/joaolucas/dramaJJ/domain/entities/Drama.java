@@ -2,8 +2,9 @@ package com.joaolucas.dramaJJ.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,7 @@ public class Drama{
     private String synopsis;
 
     @Column(name = "release_date")
-    private Date releaseDate;
+    private LocalDate releaseDate;
 
     @Column(name = "poster_img_url")
     private String posterImgUrl;

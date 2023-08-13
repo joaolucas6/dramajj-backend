@@ -2,10 +2,13 @@ package com.joaolucas.dramaJJ.domain.entities;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;;
+import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import java.util.ArrayList;
 import java.util.List;
+
+;
 
 @AllArgsConstructor
 public enum Role {

@@ -9,7 +9,6 @@ import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
 import com.joaolucas.dramaJJ.repositories.DramaRepository;
-import com.joaolucas.dramaJJ.repositories.ReviewRepository;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,8 +27,6 @@ public class UserService {
     private final DramaRepository dramaRepository;
 
     private final ActorRepository actorRepository;
-
-    private final ReviewRepository reviewRepository;
 
 
     public List<UserDTO> findAll() {

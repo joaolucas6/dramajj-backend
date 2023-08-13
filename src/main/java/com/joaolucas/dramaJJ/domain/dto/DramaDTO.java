@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = false)
@@ -17,7 +17,7 @@ public class DramaDTO extends RepresentationModel<DramaDTO> {
     private Long id;
     private String name;
     private String synopsis;
-    private Date releaseDate;
+    private LocalDate releaseDate;
     private String posterImgUrl;
     private Integer episodeNumber;
     private List<Long> genresId = new ArrayList<>();

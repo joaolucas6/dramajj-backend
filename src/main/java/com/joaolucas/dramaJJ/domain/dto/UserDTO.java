@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = false)
@@ -20,7 +20,7 @@ public class UserDTO extends RepresentationModel<UserDTO> {
     private String profilePicImgUrl;
     private String bio;
     private String gender;
-    private Date birthDate;
+    private LocalDate birthDate;
     private List<Long> favoriteDramasId = new ArrayList<>();
     private List<Long> planToWatchId = new ArrayList<>();
     private List<Long> reviewsId = new ArrayList<>();

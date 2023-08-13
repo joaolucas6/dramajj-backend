@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -17,7 +17,7 @@ public class ReviewDTO extends RepresentationModel<ReviewDTO> {
     private Long authorId;
     private Long dramaId;
     private Double rating;
-    private Date instant;
+    private LocalDateTime instant;
 
     public ReviewDTO(){
 
