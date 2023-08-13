@@ -1,4 +1,4 @@
-package com.joaolucas.dramaJJ.models.entities;
+package com.joaolucas.dramaJJ.models.enums;
 
 
 import lombok.AllArgsConstructor;

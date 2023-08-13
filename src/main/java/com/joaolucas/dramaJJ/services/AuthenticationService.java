@@ -3,7 +3,7 @@ package com.joaolucas.dramaJJ.services;
 import com.joaolucas.dramaJJ.models.dto.AuthenticationRequest;
 import com.joaolucas.dramaJJ.models.dto.AuthenticationResponse;
 import com.joaolucas.dramaJJ.models.dto.RegisterRequest;
-import com.joaolucas.dramaJJ.models.entities.Role;
+import com.joaolucas.dramaJJ.models.enums.Role;
 import com.joaolucas.dramaJJ.models.entities.User;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import com.joaolucas.dramaJJ.utils.DataValidation;

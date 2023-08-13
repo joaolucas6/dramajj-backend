@@ -1,6 +1,6 @@
 package com.joaolucas.dramaJJ.models.dto;
 
-import com.joaolucas.dramaJJ.models.entities.Gender;
+import com.joaolucas.dramaJJ.models.enums.Gender;
 import com.joaolucas.dramaJJ.models.entities.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,5 +1,7 @@
 package com.joaolucas.dramaJJ.models.entities;
 
+import com.joaolucas.dramaJJ.models.enums.Gender;
+import com.joaolucas.dramaJJ.models.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
