@@ -3,17 +3,12 @@ package com.joaolucas.dramaJJ.services;
 import com.joaolucas.dramaJJ.controllers.ActorController;
 import com.joaolucas.dramaJJ.domain.dto.ActorDTO;
 import com.joaolucas.dramaJJ.domain.entities.Actor;
-import com.joaolucas.dramaJJ.domain.entities.Drama;
-import com.joaolucas.dramaJJ.domain.entities.User;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
 import com.joaolucas.dramaJJ.repositories.ActorRepository;
-import com.joaolucas.dramaJJ.repositories.DramaRepository;
-import com.joaolucas.dramaJJ.repositories.UserRepository;
 import com.joaolucas.dramaJJ.utils.DTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -23,18 +18,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 public class ActorService {
     private final ActorRepository actorRepository;
-    private final UserRepository userRepository;
-    private final DramaRepository dramaRepository;
 
     public List<ActorDTO> findAll(){
-        List<ActorDTO> allActorsDTO = new ArrayList<>();
-        actorRepository.findAll().forEach(actor -> allActorsDTO.add(new ActorDTO(actor)));
-
-        allActorsDTO.forEach(actorDTO -> {
-            actorDTO.add(linkTo(methodOn(ActorController.class).findById(actorDTO.getId())).withSelfRel());
-        });
-
-        return allActorsDTO;
+        return actorRepository.findAll().stream().map(actor -> new ActorDTO(actor).add(linkTo(methodOn(ActorController.class).findById(actor.getId())).withSelfRel())).toList();
     }
 
     public ActorDTO findById(Long id){
@@ -82,19 +68,7 @@ public class ActorService {
                 () -> new ResourceNotFoundException(String.format("Actor with ID %d was not found", id))
         );
 
-        List<User> followers = actor.getFollowers();
-        List<Drama> dramas = actor.getDramas();
-
-
-        followers.forEach(follower -> {
-            follower.getFollowingActors().remove(actor);
-            userRepository.save(follower);
-        });
-        dramas.forEach(drama -> {
-            drama.getCasting().remove(actor);
-            dramaRepository.save(drama);
-        });
-        actorRepository.deleteById(id);
+        actorRepository.delete(actor);
     }
 
 }
