@@ -1,5 +1,6 @@
 package com.joaolucas.dramaJJ.exceptions.handler;
 
+import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.exceptions.ConflictException;
 import com.joaolucas.dramaJJ.exceptions.ExceptionResponse;
 import com.joaolucas.dramaJJ.exceptions.ResourceNotFoundException;
@@ -52,4 +53,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(response.errorCode()).body(response);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleBadRequestException(BadRequestException exception){
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.BAD_REQUEST.name(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                new Date()
+        );
+
+        return ResponseEntity.status(response.errorCode()).body(response);
+    }
 }
