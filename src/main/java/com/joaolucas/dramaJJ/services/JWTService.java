@@ -13,12 +13,12 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JWTService {
     @Value("${application.security.jwt.secret-key}")
-    private String SECRET_KEY;
+    private final String SECRET_KEY;
 
     @Value("${application.security.jwt.expiration}")
-    private long expiration;
+    private final long expiration;
 
-    public String generateKey(User user){
+    public String generateToken(User user){
         return JWT.
                 create()
                 .withSubject(user.getUsername())

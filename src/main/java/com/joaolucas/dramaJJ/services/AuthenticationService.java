@@ -4,7 +4,6 @@ import com.joaolucas.dramaJJ.exceptions.BadRequestException;
 import com.joaolucas.dramaJJ.models.dto.AuthenticationRequest;
 import com.joaolucas.dramaJJ.models.dto.AuthenticationResponse;
 import com.joaolucas.dramaJJ.models.dto.RegisterRequest;
-import com.joaolucas.dramaJJ.models.enums.Role;
 import com.joaolucas.dramaJJ.models.entities.User;
 import com.joaolucas.dramaJJ.repositories.UserRepository;
 import com.joaolucas.dramaJJ.utils.DataValidation;
@@ -34,7 +33,7 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(request.role());
 
-        var token = jwtService.generateKey(userRepository.save(user));
+        var token = jwtService.generateToken(userRepository.save(user));
         return new AuthenticationResponse(token);
     }
 
@@ -45,7 +44,7 @@ public class AuthenticationService {
         );
 
         var auth = authenticationManager.authenticate(usernamePassword);
-        var token = jwtService.generateKey((User) auth.getPrincipal());
+        var token = jwtService.generateToken((User) auth.getPrincipal());
 
         return new AuthenticationResponse(token);
     }

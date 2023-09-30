@@ -1,6 +1,5 @@
 package com.joaolucas.dramaJJ.services;
 
-import com.joaolucas.dramaJJ.models.dto.AuthenticationRequest;
 import com.joaolucas.dramaJJ.models.dto.AuthenticationResponse;
 import com.joaolucas.dramaJJ.models.dto.RegisterRequest;
 import com.joaolucas.dramaJJ.models.entities.User;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +40,7 @@ class AuthenticationServiceTest {
     @Test
     void itShouldRegisterUser() {
         when(userRepository.save(user)).thenReturn(user);
-        when(jwtService.generateKey(user)).thenReturn("token");
+        when(jwtService.generateToken(user)).thenReturn("token");
 
         RegisterRequest request = new RegisterRequest("jo", "jo", "jojo", "jojo", Role.ADMIN);
 
