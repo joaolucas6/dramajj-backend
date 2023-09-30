@@ -26,14 +26,14 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request){
         if(!DataValidation.isRegisterRequestValid(request)) throw new BadRequestException("Invalid register info");
 
-        User user = User
-                .builder()
-                .firstName(request.firstName())
-                .lastName(request.lastName())
-                .username(request.username())
-                .password(passwordEncoder.encode(request.password()))
-                .role(request.role())
-                .build();
+        User user = new User();
+
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setRole(request.role());
+
         var token = jwtService.generateKey(userRepository.save(user));
         return new AuthenticationResponse(token);
     }
@@ -49,4 +49,6 @@ public class AuthenticationService {
 
         return new AuthenticationResponse(token);
     }
+
+
 }
