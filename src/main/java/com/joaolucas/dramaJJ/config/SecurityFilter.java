@@ -1,6 +1,6 @@
 package com.joaolucas.dramaJJ.config;
 
-import com.joaolucas.dramaJJ.services.CostumizedUserDetailsService;
+import com.joaolucas.dramaJJ.services.CustomizedUserDetailsService;
 import com.joaolucas.dramaJJ.services.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
-    private final CostumizedUserDetailsService costumizedUserDetailsService;
+    private final CustomizedUserDetailsService customizedUserDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
@@ -34,7 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String username = jwtService.extractUsernameAndValidate(token);
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = costumizedUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = customizedUserDetailsService.loadUserByUsername(username);
 
             var authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,

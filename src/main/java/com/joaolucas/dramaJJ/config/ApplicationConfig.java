@@ -1,6 +1,6 @@
 package com.joaolucas.dramaJJ.config;
 
-import com.joaolucas.dramaJJ.services.CostumizedUserDetailsService;
+import com.joaolucas.dramaJJ.services.CustomizedUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final CostumizedUserDetailsService costumizedUserDetailsService;
+    private final CustomizedUserDetailsService customizedUserDetailsService;
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(costumizedUserDetailsService);
+        authenticationProvider.setUserDetailsService(customizedUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
