@@ -22,8 +22,8 @@ public class GenreDTO extends RepresentationModel<GenreDTO> {
     }
 
     public GenreDTO(Genre genre){
-        setId(genre.getId());
-        setName(genre.getName());
+        if(genre.getId() != null) setId(genre.getId());
+        if(genre.getName() != null) setName(genre.getName());
         genre.getDramas().forEach(drama -> dramasId.add(drama.getId()));
     }
 }

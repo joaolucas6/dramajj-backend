@@ -24,13 +24,13 @@ public class ReviewDTO extends RepresentationModel<ReviewDTO> {
     }
 
     public ReviewDTO(Review review){
-        setId(review.getId());
-        setTitle(review.getTitle());
-        setText(review.getText());
-        setAuthorId(review.getAuthor().getId());
-        setDramaId(review.getDrama().getId());
-        setRating(review.getRating());
-        setInstant(review.getInstant());
+        if(review.getId() != null) setId(review.getId());
+        if(review.getTitle() != null) setTitle(review.getTitle());
+        if(review.getText() != null) setText(review.getText());
+        if(review.getAuthor() != null) setAuthorId(review.getAuthor().getId());
+        if(review.getDrama() != null) setDramaId(review.getDrama().getId());
+        if(review.getRating() != null) setRating(review.getRating());
+        if(review.getInstant() != null) setInstant(review.getInstant());
     }
 
 }

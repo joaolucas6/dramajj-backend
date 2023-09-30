@@ -31,15 +31,15 @@ public class ActorDTO extends RepresentationModel<ActorDTO> {
 
     public ActorDTO(Actor actor){
 
-        setId(actor.getId());
-        setFirstName(actor.getFirstName());
-        setLastName(actor.getLastName());
-        setSurname(actor.getSurname());
-        setGender(actor.getGender());
-        setBirthDate(actor.getBirthDate());
-        setPictureUrl(actor.getPictureUrl());
-        setNationality(actor.getNationality());
-        setBio(actor.getBio());
+        if(actor.getId() != null) setId(actor.getId());
+        if(actor.getFirstName() != null) setFirstName(actor.getFirstName());
+        if(actor.getLastName() != null) setLastName(actor.getLastName());
+        if(actor.getSurname() != null) setSurname(actor.getSurname());
+        if(actor.getGender() != null) setGender(actor.getGender());
+        if(actor.getBirthDate() != null) setBirthDate(actor.getBirthDate());
+        if(actor.getPictureUrl() != null) setPictureUrl(actor.getPictureUrl());
+        if(actor.getNationality() != null) setNationality(actor.getNationality());
+        if(actor.getBio() != null) setBio(actor.getBio());
 
         actor.getFollowers().forEach(follower -> followersId.add(follower.getId()));
         actor.getDramas().forEach(drama -> dramasId.add(drama.getId()));

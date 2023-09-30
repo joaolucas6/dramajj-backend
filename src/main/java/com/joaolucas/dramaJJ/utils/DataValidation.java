@@ -22,7 +22,7 @@ public class DataValidation {
 
     public static boolean isReviewInfoValid(ReviewDTO request){
         if(isAllFieldsNull(request)) return false;
-        if(request.getRating() > 10 || request.getRating() < 0) return false;
+        if(request.getRating() != null && request.getRating() > 10 || request.getRating() != null && request.getRating() < 0) return false;
         if(request.getTitle() != null && request.getTitle().isBlank() || request.getTitle() != null && request.getTitle().length() > 300) return false;
         if(request.getText() != null && request.getText().isBlank() || request.getText() != null && request.getText().length() > 4500) return false;
         return true;

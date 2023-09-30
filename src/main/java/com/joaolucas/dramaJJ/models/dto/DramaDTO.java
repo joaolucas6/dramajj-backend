@@ -30,12 +30,12 @@ public class DramaDTO extends RepresentationModel<DramaDTO> {
 
     public DramaDTO(Drama drama){
 
-        setId(drama.getId());
-        setName(drama.getName());
-        setSynopsis(drama.getSynopsis());
-        setReleaseDate(drama.getReleaseDate());
-        setPosterImgUrl(drama.getPosterImgUrl());
-        setEpisodeNumber(drama.getEpisodeNumber());
+        if(drama.getId() != null) setId(drama.getId());
+        if(drama.getName() != null) setName(drama.getName());
+        if(drama.getSynopsis() != null) setSynopsis(drama.getSynopsis());
+        if(drama.getReleaseDate() != null) setReleaseDate(drama.getReleaseDate());
+        if(drama.getPosterImgUrl() != null) setPosterImgUrl(drama.getPosterImgUrl());
+        if(drama.getEpisodeNumber() != null) setEpisodeNumber(drama.getEpisodeNumber());
         drama.getGenres().forEach(genre -> genresId.add(genre.getId()));
         drama.getCasting().forEach(actor -> castingId.add(actor.getId()));
         drama.getReviews().forEach(review -> reviewsId.add(review.getId()));
