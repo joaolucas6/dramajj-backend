@@ -39,7 +39,7 @@ public class DataValidation {
         if(isAllFieldsNull(request)) return false;
         if(request.getName() != null && request.getName().isBlank() || request.getName() != null && request.getName().length() > 30) return false;
         if(request.getSynopsis() != null && request.getSynopsis().isBlank() || request.getSynopsis() != null && request.getSynopsis().length() > 1000) return false;
-        if(request.getReleaseDate().isAfter(LocalDate.now())) return false;
+        if(request.getReleaseDate() != null && request.getReleaseDate().isAfter(LocalDate.now())) return false;
         if(request.getEpisodeNumber() != null && request.getEpisodeNumber() < 0) return false;
         if(request.getPosterImgUrl() != null && request.getPosterImgUrl().isBlank()) return false;
 

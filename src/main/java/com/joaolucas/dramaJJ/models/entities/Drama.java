@@ -36,7 +36,7 @@ public class Drama{
     private Integer episodeNumber;
 
     @ManyToMany(mappedBy = "dramas")
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
